@@ -1,4 +1,4 @@
-﻿using FusionNews_API.Entities;
+﻿using Core.Entities;
 using FusionNews_API.Interfaces.News;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
