@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace FusionNews_API.Entities
+namespace Core.Entities
 {
     public class NewsArticle
     {
