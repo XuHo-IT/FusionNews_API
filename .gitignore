@@ -1,0 +1,16 @@
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.tsbuildinfo
+
+model.tar.gz
+
+cert
+appsettings.json
+FusionNews_API.csproj
