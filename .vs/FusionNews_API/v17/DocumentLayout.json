@@ -1,7 +1,44 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\CSharp_Projects\\FusionNews_API\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\services\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\services\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\middleware\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\middleware\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\interfaces\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\interfaces\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\helpers\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\helpers\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\extensions\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\extensions\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\error\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\error\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\entities\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\entities\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\dtos\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\dtos\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\data\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\data\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,6 +95,123 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Services\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\Services\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Services\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\Services\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:33:15.538Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Middleware\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\Middleware\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Middleware\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\Middleware\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:33:06.996Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Interfaces\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\Interfaces\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Interfaces\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\Interfaces\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:32:59.24Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Helpers\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\Helpers\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Helpers\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\Helpers\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:32:50.504Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Extensions\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\Extensions\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Extensions\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\Extensions\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:32:41.168Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Error\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\Error\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Error\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\Error\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:32:33.65Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Entities\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\Entities\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Entities\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\Entities\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:32:26.363Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\DTOs\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\DTOs\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\DTOs\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\DTOs\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:32:18.482Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "temp.cs",
+              "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Data\\temp.cs",
+              "RelativeDocumentMoniker": "FusionNews_API\\Data\\temp.cs",
+              "ToolTip": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Data\\temp.cs",
+              "RelativeToolTip": "FusionNews_API\\Data\\temp.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:32:03.391Z",
+              "EditorCaption": ""
             }
           ]
         },
