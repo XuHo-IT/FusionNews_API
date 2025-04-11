@@ -11,7 +11,23 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddService();
 
+// ###############################################################
+// check connection string
+
+var connectionString = Environment.GetEnvironmentVariable("POSTGRE_CONNECTION_STRING");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    Console.WriteLine("POSTGRE_CONNECTION_STRING null.");
+}
+else
+{
+    Console.WriteLine("ok");
+}
+// ###############################################################
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
