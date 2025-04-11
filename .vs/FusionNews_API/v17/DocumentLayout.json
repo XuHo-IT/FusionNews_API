@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\CSharp_Projects\\FusionNews_API\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\interfaces\\news\\inewsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\interfaces\\news\\inewsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\controllers\\newscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\controllers\\newscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\interfaces\\news\\inewsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|solutionrelative:fusionnews_api\\interfaces\\news\\inewsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{108DD19D-EC57-4E69-AEC0-18D85F078468}|FusionNews_API\\FusionNews_API.csproj|d:\\csharp_projects\\fusionnews_api\\fusionnews_api\\middleware\\temp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -54,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 14,
+          "SelectedChildIndex": 19,
           "Children": [
             {
               "$type": "Bookmark",
@@ -105,8 +105,24 @@
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:3:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "NewsArticle.cs",
               "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Entities\\NewsArticle.cs",
               "RelativeDocumentMoniker": "FusionNews_API\\Entities\\NewsArticle.cs",
@@ -114,12 +130,11 @@
               "RelativeToolTip": "FusionNews_API\\Entities\\NewsArticle.cs",
               "ViewState": "AQIAAD0AAAAAAAAAAAAowD8AAAArAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T03:13:58.726Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-11T03:13:58.726Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Program.cs",
               "RelativeDocumentMoniker": "FusionNews_API\\Program.cs",
@@ -127,12 +142,11 @@
               "RelativeToolTip": "FusionNews_API\\Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T02:57:20.258Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-11T02:57:20.258Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "NewsController.cs",
               "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Controllers\\NewsController.cs",
               "RelativeDocumentMoniker": "FusionNews_API\\Controllers\\NewsController.cs",
@@ -145,7 +159,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "INewsService.cs",
               "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Interfaces\\News\\INewsService.cs",
               "RelativeDocumentMoniker": "FusionNews_API\\Interfaces\\News\\INewsService.cs",
@@ -158,7 +172,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "NewsService.cs",
               "DocumentMoniker": "D:\\CSharp_Projects\\FusionNews_API\\FusionNews_API\\Services\\News\\NewsService.cs",
               "RelativeDocumentMoniker": "FusionNews_API\\Services\\News\\NewsService.cs",
@@ -166,8 +180,7 @@
               "RelativeToolTip": "FusionNews_API\\Services\\News\\NewsService.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAABIAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T02:37:31.297Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-11T02:37:31.297Z"
             },
             {
               "$type": "Document",
