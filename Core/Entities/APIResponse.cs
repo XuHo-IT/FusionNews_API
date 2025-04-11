@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace FusionNews_API.Entities
+namespace Core.Entities
 {
     public class APIResponse
     {
