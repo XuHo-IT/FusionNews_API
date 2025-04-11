@@ -3,8 +3,9 @@
 
 
 # Ignore build output
-/obj/
-/bin/
+**/bin/
+**/obj/
+
 
 
 .vscode/*
