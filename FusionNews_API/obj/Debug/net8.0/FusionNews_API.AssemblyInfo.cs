@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FusionNews_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1fd2a287c585c70c690e024146f117592a4993ee")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98dc9fa6396aa9f3e841cea5d87bc9d6f38a1574")]
 [assembly: System.Reflection.AssemblyProductAttribute("FusionNews_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FusionNews_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
