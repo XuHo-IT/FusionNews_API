@@ -1,9 +1,9 @@
-﻿using Application.Reponse;
+﻿using Application.Entities.Base;
 
 namespace Application.Interfaces
 {
     public interface INewsService
     {
-        Task<APIResponse> GetNewsAsync();
+        Task<List<NewsArticle>> GetNewsAsync();
     }
 }
