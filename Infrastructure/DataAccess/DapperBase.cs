@@ -1,4 +1,4 @@
-﻿using Npgsql;
+using Npgsql;
 using System.Data;
 
 namespace Repositories.DataAccess
