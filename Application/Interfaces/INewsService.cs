@@ -1,6 +1,6 @@
-﻿using Core.Entities;
+﻿using Application.Entities.Base;
 
-namespace FusionNews_API.Interfaces.News
+namespace Application.Interfaces
 {
     public interface INewsService
     {
