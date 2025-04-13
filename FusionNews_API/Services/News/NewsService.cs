@@ -2,7 +2,10 @@
 
 using Application.Entities.Base;
 using Application.Interfaces;
+using Application.Reponse;
+using Application.Request.Application.Request;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace FusionNews_API.Services.News
 {
@@ -17,22 +20,59 @@ namespace FusionNews_API.Services.News
             _httpClient = new HttpClient();
 
         }
-        public async Task<List<NewsArticle>> GetNewsAsync()
+        public async Task<APIResponse> GetNewsAsync()
         {
             var apiKey = _configuration["News:APIKey"];
             var endpoint = _configuration["News:APIEndPoint"];
-            var url = $"{endpoint}{apiKey}";
 
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
+            var request = new APIRequest
+            {
+                Url = $"{endpoint}{apiKey}",
+                Method = "GET"
+            };
 
-            var jsonString = await response.Content.ReadAsStringAsync();
+            var apiResponse = new APIResponse();
 
-            var apiResponse = JsonConvert.DeserializeObject<NewsApiResponse>(jsonString);
+            try
+            {
+                var httpRequest = new HttpRequestMessage(new HttpMethod(request.Method), request.Url);
 
-            var filteredResults = apiResponse.Results.ToList();
+                foreach (var header in request.Headers)
+                {
+                    httpRequest.Headers.Add(header.Key, header.Value);
+                }
 
-            return filteredResults;
+                if (request.Data != null && (request.Method == "POST" || request.Method == "PUT"))
+                {
+                    var jsonData = JsonConvert.SerializeObject(request.Data);
+                    httpRequest.Content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                }
+
+                var response = await _httpClient.SendAsync(httpRequest);
+                var jsonString = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var newsData = JsonConvert.DeserializeObject<NewsApiResponse>(jsonString);
+                    apiResponse.Result = newsData.Results;
+                    apiResponse.StatusCode = response.StatusCode;
+                    apiResponse.isSuccess = true;
+                }
+                else
+                {
+                    apiResponse.StatusCode = response.StatusCode;
+                    apiResponse.isSuccess = false;
+                    apiResponse.ErrorMessages.Add(jsonString);
+                }
+            }
+            catch (Exception ex)
+            {
+                apiResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                apiResponse.isSuccess = false;
+                apiResponse.ErrorMessages.Add(ex.Message);
+            }
+
+            return apiResponse;
         }
 
 
