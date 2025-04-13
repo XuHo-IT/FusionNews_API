@@ -7,18 +7,33 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\**" />
+    <Compile Remove="Error\**" />
+    <Compile Remove="Helpers\**" />
+    <Compile Remove="Middleware\**" />
+    <Content Remove="DTOs\**" />
+    <Content Remove="Error\**" />
+    <Content Remove="Helpers\**" />
+    <Content Remove="Middleware\**" />
+    <EmbeddedResource Remove="DTOs\**" />
+    <EmbeddedResource Remove="Error\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <EmbeddedResource Remove="Middleware\**" />
+    <None Remove="DTOs\**" />
+    <None Remove="Error\**" />
+    <None Remove="Helpers\**" />
+    <None Remove="Middleware\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.44.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="Error\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Middleware\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Service\Service.csproj" />
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
