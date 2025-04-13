@@ -11,8 +11,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddService();
 
-// ###############################################################
-// check connection string
 
 var connectionString = Environment.GetEnvironmentVariable("POSTGRE_CONNECTION_STRING");
 
@@ -24,7 +22,6 @@ else
 {
     Console.WriteLine("ok");
 }
-// ###############################################################
 
 var app = builder.Build();
 

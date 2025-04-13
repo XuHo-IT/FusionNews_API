@@ -1,5 +1,5 @@
-﻿using Core.Entities;
-using FusionNews_API.Interfaces.News;
+﻿using Application.Interfaces;
+using Application.Reponse;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

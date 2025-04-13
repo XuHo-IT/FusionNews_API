@@ -1,5 +1,7 @@
-﻿using Core.Entities;
-using FusionNews_API.Interfaces.News;
+﻿
+
+using Application.Entities.Base;
+using Application.Interfaces;
 using Newtonsoft.Json;
 
 namespace FusionNews_API.Services.News
