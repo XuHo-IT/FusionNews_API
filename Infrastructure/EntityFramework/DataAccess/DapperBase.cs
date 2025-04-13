@@ -1,7 +1,7 @@
 using Npgsql;
 using System.Data;
 
-namespace Repositories.DataAccess
+namespace Infrastructure.EntityFramework.DataAccess
 {
     public abstract class DapperBase
     {
