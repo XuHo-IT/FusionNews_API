@@ -1,5 +1,6 @@
-﻿using FusionNews_API.Interfaces.News;
+﻿using Application.Interfaces;
 using FusionNews_API.Services.News;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FusionNews_API.WebExtensions
 {
