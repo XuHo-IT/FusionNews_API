@@ -6,7 +6,8 @@ namespace FusionNews_API.Data
     public class ApplicationDBContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<Post> Products { get; set; }
+        public DbSet<Post> Post { get; set; }
+        public DbSet<PostTag> PostTags { get; set; } 
         public DbSet<NewsOfPost> NewsOfPosts { get; set; }
         public DbSet<CommentOfPost> Comments { get; set; }
 
@@ -17,7 +18,7 @@ namespace FusionNews_API.Data
             {
                 entity.ToTable("tag");
                 entity.HasKey(t => t.TagId);
-                entity.Property(t => t.TagId).HasColumnName("tag_id");
+                entity.Property(t => t.TagId).HasColumnName("tag_id").ValueGeneratedOnAdd();
                 entity.Property(t => t.TagName).HasColumnName("name");
             });
 
@@ -26,19 +27,34 @@ namespace FusionNews_API.Data
             {
                 entity.ToTable("post");
                 entity.HasKey(p => p.PostId);
-                entity.Property(p => p.PostId).HasColumnName("post_id");
-                entity.Property(p => p.TagId).HasColumnName("tag_id");
+                entity.Property(p => p.PostId).HasColumnName("post_id").ValueGeneratedOnAdd();
                 entity.Property(p => p.Title).HasColumnName("title");
                 entity.Property(p => p.Content).HasColumnName("content");
-                entity.Property(p => p.NewsOfPostId).HasColumnName("news_of_post_id");
+                entity.Property(p => p.NewsOfPostId).HasColumnName("news_of_post_id").IsRequired(false);
                 entity.Property(p => p.CreatedOn).HasColumnName("created_on");
-                entity.HasOne(p => p.Tag)
-                    .WithOne()
-                    .HasForeignKey<Post>(p => p.TagId);
-                entity
-                    .HasOne(p => p.NewsOfPost)
-                    .WithOne(n => n.Post)
-                    .HasForeignKey<Post>(p => p.NewsOfPostId);
+
+                entity.HasOne(p => p.NewsOfPost)
+                    .WithMany(n => n.Posts) // Relation 1-n
+                    .HasForeignKey(p => p.NewsOfPostId) 
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // PostTag
+            modelBuilder.Entity<PostTag>(entity =>
+            {
+                entity.ToTable("post_tag");
+                entity.HasKey(pt => new { pt.PostId, pt.TagId });
+                entity.Property(pt => pt.PostId).HasColumnName("post_id");
+                entity.Property(pt => pt.TagId).HasColumnName("tag_id");
+
+                // => Relation n-n
+                entity.HasOne(pt => pt.Post)
+                    .WithMany(p => p.PostTags)
+                    .HasForeignKey(pt => pt.PostId);
+
+                entity.HasOne(pt => pt.Tag)
+                    .WithMany(t => t.PostTags)
+                    .HasForeignKey(pt => pt.TagId);
             });
 
             // NewsOfPost
@@ -47,7 +63,7 @@ namespace FusionNews_API.Data
                 entity.ToTable("news_of_post");
 
                 entity.HasKey(n => n.NewsOfPostId);
-                entity.Property(n => n.NewsOfPostId).HasColumnName("news_of_post_id");
+                entity.Property(n => n.NewsOfPostId).HasColumnName("news_of_post_id").ValueGeneratedOnAdd();
                 entity.Property(n => n.Title).HasColumnName("title");
                 entity.Property(n => n.ImageUrl).HasColumnName("image_url");
                 entity.Property(n => n.Link).HasColumnName("link");
@@ -59,7 +75,7 @@ namespace FusionNews_API.Data
             {
                 entity.ToTable("comment_of_post");
                 entity.HasKey(c => c.CommentId);
-                entity.Property(c => c.CommentId).HasColumnName("comment_id");
+                entity.Property(c => c.CommentId).HasColumnName("comment_id").ValueGeneratedOnAdd();
                 entity.Property(c => c.Content).HasColumnName("content");
                 entity.Property(c => c.CreatedOn).HasColumnName("created_on");
                 entity.Property(c => c.PostId).HasColumnName("post_id");
@@ -67,6 +83,8 @@ namespace FusionNews_API.Data
                       .WithMany(p => p.Comments)
                       .HasForeignKey(c => c.PostId);
             });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

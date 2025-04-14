@@ -16,7 +16,13 @@ namespace Infrastructure.Services
         {
             _postRepository = postRepository;
         }
-        public async Task<IReadOnlyList<Post>> GetAllPosts()
+
+        public async Task<Post> CreatePost(Post postModel)
+        {
+            return await _postRepository.CreatePost(postModel);
+        }
+
+        public async Task<List<Post>> GetAllPosts()
         {
             return await _postRepository.GetAllPosts();
         }
