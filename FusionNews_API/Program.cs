@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddService();
-
+builder.Services.AddRepository();
 
 var connectionString = Environment.GetEnvironmentVariable("POSTGRE_CONNECTION_STRING");
 
