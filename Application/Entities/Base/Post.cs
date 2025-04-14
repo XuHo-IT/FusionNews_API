@@ -17,11 +17,11 @@ namespace Application.Entities.Base
 
         public string Content { get; set; } = string.Empty;
 
-        public NewsOfPost NewsOfPost { get; set; }  
+        public int NewsOfPostId { get; set; } 
 
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
-
         public Tag? Tag { get; set; }
+        public NewsOfPost? NewsOfPost { get; set; }
         public List<CommentOfPost>? Comments { get; set; }
 
     }

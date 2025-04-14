@@ -1,4 +1,7 @@
+using FusionNews_API.Data;
 using FusionNews_API.WebExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,16 +15,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddService();
 builder.Services.AddRepository();
 
-var connectionString = Environment.GetEnvironmentVariable("POSTGRE_CONNECTION_STRING");
 
-if (string.IsNullOrEmpty(connectionString))
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
-    Console.WriteLine("POSTGRE_CONNECTION_STRING null.");
-}
-else
-{
-    Console.WriteLine("ok");
-}
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        opts => opts.CommandTimeout(120));
+});
 
 var app = builder.Build();
 
