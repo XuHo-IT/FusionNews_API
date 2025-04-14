@@ -1,3 +1,4 @@
+using Common.Middleware;
 using FusionNews_API.Data;
 using FusionNews_API.WebExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 });
 
 var app = builder.Build();
-
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
