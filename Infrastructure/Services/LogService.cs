@@ -1,18 +1,30 @@
-﻿using Application.Interfaces;
-using Infrastructure.LogProvider;
+﻿using Application.Interfaces.IRepositories;
+using Application.Interfaces.Services;
+
 namespace Infrastructure.Services
 {
     public class LogService : ILogService
     {
-        private readonly Log _logProvider;
+        private readonly ILogRepository _logRepo;
 
-        public LogService(Log logProvider)
+        public LogService(ILogRepository logRepo)
         {
-            _logProvider = logProvider;
+            _logRepo = logRepo;
         }
-        public void LogError(string message, Exception? ex = null) => _logProvider.Error(message, ex);
-        public void LogiInfo(string message) => _logProvider.Info(message);
-        public void LogWarn(string message) => _logProvider.Warn(message);
 
+        public void LogError(string message, Exception? ex = null)
+        {
+            _logRepo.LogError(message, ex);
+        }
+
+        public void LogiInfo(string message)
+        {
+            _logRepo.LogInfo(message);
+        }
+
+        public void LogWarn(string message)
+        {
+            _logRepo.LogWarn(message);
+        }
     }
 }
