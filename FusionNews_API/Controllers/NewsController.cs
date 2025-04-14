@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Services;
 using Application.Reponse;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
