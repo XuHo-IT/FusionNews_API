@@ -13,11 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EntityFramework\Repositories\" />
     <Folder Include="Extensions\" />
 	  <PackageReference Include="Dapper" Version="2.1.35" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
-	  <PackageReference Include="Microsoft.SemanticKernel" Version="1.44.0" />
+	  <PackageReference Include="Microsoft.SemanticKernel" Version="1.*" />
+	  <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.*" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="Npgsql" Version="9.0.3" />
   </ItemGroup>
