@@ -1,71 +1,37 @@
 ﻿using Application.Entities.Base;
-using Application.Interfaces;
-using Application.Reponse;
-using Application.Request.Application.Request;
+using Application.Interfaces.IRepositories;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System.Net;
 
 namespace Infrastructure.EntityFramework.Repositories
 {
     public class NewsRepository : INewsRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
+        private readonly string _apiKey;
+        private readonly string _endpoint;
 
         public NewsRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
             _httpClient = new HttpClient();
+            _apiKey = configuration["News:APIKey"];
+            _endpoint = configuration["News:APIEndPoint"];
         }
 
-        public async Task<APIResponse> FetchNewsFromApiAsync()
+        public async Task<List<NewsArticle>> FetchNewsAsync()
         {
-            var apiKey = _configuration["News:APIKey"];
-            var endpoint = _configuration["News:APIEndPoint"];
+            var url = $"{_endpoint}{_apiKey}";
+            var response = await _httpClient.GetAsync(url);
 
-            var request = new APIRequest
+            var json = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
             {
-                Url = $"{endpoint}{apiKey}",
-                Method = "GET"
-            };
-
-            var apiResponse = new APIResponse();
-
-            try
-            {
-                var httpRequest = new HttpRequestMessage(HttpMethod.Get, request.Url);
-
-                foreach (var header in request.Headers)
-                {
-                    httpRequest.Headers.Add(header.Key, header.Value);
-                }
-
-                var response = await _httpClient.SendAsync(httpRequest);
-                var json = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var newsApi = JsonConvert.DeserializeObject<NewsApiResponse>(json);
-                    apiResponse.Result = newsApi.Results;
-                    apiResponse.StatusCode = response.StatusCode;
-                    apiResponse.isSuccess = true;
-                }
-                else
-                {
-                    apiResponse.StatusCode = response.StatusCode;
-                    apiResponse.isSuccess = false;
-                    apiResponse.ErrorMessages.Add(json);
-                }
-            }
-            catch (Exception ex)
-            {
-                apiResponse.StatusCode = HttpStatusCode.InternalServerError;
-                apiResponse.isSuccess = false;
-                apiResponse.ErrorMessages.Add(ex.Message);
+                throw new Exception("News API Error: " + json);
             }
 
-            return apiResponse;
+            var newsResponse = JsonConvert.DeserializeObject<NewsApiResponse>(json);
+            return newsResponse.Results ?? new List<NewsArticle>();
         }
     }
 }

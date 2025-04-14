@@ -1,0 +1,6 @@
+﻿You are a helpful assistant. Use the following chat history to generate a response.
+
+{{history}}
+
+User: {{input}}
+Assistant:
