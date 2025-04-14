@@ -9,6 +9,7 @@ namespace Application.Interfaces.IServices
 {
     public interface IPostService
     {
-        Task<IReadOnlyList<Post>> GetAllPosts();
+        Task<List<Post>> GetAllPosts();
+        Task<Post> CreatePost(Post postModel);
     }
 }
