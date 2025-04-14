@@ -7,19 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DTOs\**" />
     <Compile Remove="Error\**" />
     <Compile Remove="Helpers\**" />
     <Compile Remove="Middleware\**" />
-    <Content Remove="DTOs\**" />
     <Content Remove="Error\**" />
     <Content Remove="Helpers\**" />
     <Content Remove="Middleware\**" />
-    <EmbeddedResource Remove="DTOs\**" />
     <EmbeddedResource Remove="Error\**" />
     <EmbeddedResource Remove="Helpers\**" />
     <EmbeddedResource Remove="Middleware\**" />
-    <None Remove="DTOs\**" />
     <None Remove="Error\**" />
     <None Remove="Helpers\**" />
     <None Remove="Middleware\**" />

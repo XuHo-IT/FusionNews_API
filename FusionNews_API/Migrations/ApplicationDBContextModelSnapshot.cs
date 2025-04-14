@@ -103,17 +103,9 @@ namespace FusionNews_API.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_on");
 
-                    b.Property<int>("NewsOfPostId")
+                    b.Property<int?>("NewsOfPostId")
                         .HasColumnType("integer")
                         .HasColumnName("news_of_post_id");
-
-                    b.Property<string>("TagId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("tag_id");
-
-                    b.Property<string>("TagId1")
-                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -122,22 +114,36 @@ namespace FusionNews_API.Migrations
 
                     b.HasKey("PostId");
 
-                    b.HasIndex("NewsOfPostId")
-                        .IsUnique();
-
-                    b.HasIndex("TagId")
-                        .IsUnique();
-
-                    b.HasIndex("TagId1");
+                    b.HasIndex("NewsOfPostId");
 
                     b.ToTable("post", (string)null);
                 });
 
+            modelBuilder.Entity("Application.Entities.Base.PostTag", b =>
+                {
+                    b.Property<int>("PostId")
+                        .HasColumnType("integer")
+                        .HasColumnName("post_id");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tag_id");
+
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("post_tag", (string)null);
+                });
+
             modelBuilder.Entity("Application.Entities.Base.Tag", b =>
                 {
-                    b.Property<string>("TagId")
-                        .HasColumnType("text")
+                    b.Property<int>("TagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
                         .HasColumnName("tag_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TagId"));
 
                     b.Property<string>("TagName")
                         .IsRequired()
@@ -163,40 +169,47 @@ namespace FusionNews_API.Migrations
             modelBuilder.Entity("Application.Entities.Base.Post", b =>
                 {
                     b.HasOne("Application.Entities.Base.NewsOfPost", "NewsOfPost")
-                        .WithOne("Post")
-                        .HasForeignKey("Application.Entities.Base.Post", "NewsOfPostId")
+                        .WithMany("Posts")
+                        .HasForeignKey("NewsOfPostId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("NewsOfPost");
+                });
+
+            modelBuilder.Entity("Application.Entities.Base.PostTag", b =>
+                {
+                    b.HasOne("Application.Entities.Base.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Application.Entities.Base.Tag", "Tag")
-                        .WithOne()
-                        .HasForeignKey("Application.Entities.Base.Post", "TagId")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Application.Entities.Base.Tag", null)
-                        .WithMany("Posts")
-                        .HasForeignKey("TagId1");
-
-                    b.Navigation("NewsOfPost");
+                    b.Navigation("Post");
 
                     b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Application.Entities.Base.NewsOfPost", b =>
                 {
-                    b.Navigation("Post")
-                        .IsRequired();
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Application.Entities.Base.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("PostTags");
                 });
 
             modelBuilder.Entity("Application.Entities.Base.Tag", b =>
                 {
-                    b.Navigation("Posts");
+                    b.Navigation("PostTags");
                 });
 #pragma warning restore 612, 618
         }
