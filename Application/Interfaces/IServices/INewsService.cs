@@ -1,6 +1,6 @@
 ﻿using Application.Reponse;
 
-namespace Application.Interfaces
+namespace Application.Interfaces.Services
 {
     public interface INewsService
     {
