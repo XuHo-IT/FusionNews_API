@@ -1,28 +1,29 @@
 ﻿using Application.Interfaces.IRepositories;
 using Application.Interfaces.Services;
 using Application.Reponse;
+using Application.Request;
 using System.Net;
 
-namespace FusionNews_API.Services.News
+namespace Infrastructure.Services
 {
-    public class NewsService : INewsService
+    public class ChatService : IChatService
     {
-        private readonly INewsRepository _newsRepository;
+        private readonly IChatRepository _repo;
 
-        public NewsService(INewsRepository newsRepository)
+        public ChatService(IChatRepository repo)
         {
-            _newsRepository = newsRepository;
+            _repo = repo;
         }
 
-        public async Task<APIResponse> GetNewsAsync()
+        public async Task<APIResponse> GetReplyAsync(ChatRequest request)
         {
             var response = new APIResponse();
 
             try
             {
-                var articles = await _newsRepository.FetchNewsAsync();
+                var reply = await _repo.SendMessageToGeminiAsync(request.Message);
 
-                response.Result = articles;
+                response.Result = new ChatResponse { Reply = reply };
                 response.StatusCode = HttpStatusCode.OK;
                 response.isSuccess = true;
             }

@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.IRepositories;
 using Infrastructure.EntityFramework.Repositories;
 
 namespace FusionNews_API.WebExtensions
@@ -9,6 +9,10 @@ namespace FusionNews_API.WebExtensions
         {
 
             services.AddScoped<INewsRepository, NewsRepository>();
+            services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<ILogRepository, LogRepository>();
+
+
             return services;
         }
     }
