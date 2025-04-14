@@ -13,6 +13,6 @@ namespace Application.Entities.Base
         public string ImageUrl { get; set; } = string.Empty;
         public string Link { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
-        public Post Post { get; set; }
+        public ICollection<Post>? Posts { get; set; }
     }
 }
