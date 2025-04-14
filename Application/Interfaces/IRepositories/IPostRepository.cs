@@ -9,6 +9,7 @@ namespace Application.Interfaces.IRepositories
 {
     public interface IPostRepository
     {
-        Task<IReadOnlyList<Post>> GetAllPosts();
+        Task<List<Post>> GetAllPosts();
+        Task<Post> CreatePost(Post postModel);
     }
 }
