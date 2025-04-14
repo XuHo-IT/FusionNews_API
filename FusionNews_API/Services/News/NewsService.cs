@@ -2,39 +2,29 @@
 
 using Application.Entities.Base;
 using Application.Interfaces;
-using Newtonsoft.Json;
 
 namespace FusionNews_API.Services.News
 {
     public class NewsService : INewsService
     {
-        private readonly IConfiguration _configuration;
-        private readonly HttpClient _httpClient;
+        private readonly INewsRepository _newsRepository;
 
-        public NewsService(IConfiguration configuration)
+        public NewsService(INewsRepository newsRepository)
         {
-            _configuration = configuration;
-            _httpClient = new HttpClient();
-
+            _newsRepository = newsRepository;
         }
+
         public async Task<List<NewsArticle>> GetNewsAsync()
         {
-            var apiKey = _configuration["News:APIKey"];
-            var endpoint = _configuration["News:APIEndPoint"];
-            var url = $"{endpoint}{apiKey}";
+            var response = await _newsRepository.FetchNewsFromApiAsync();
 
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
+            if (response.isSuccess && response.Result is List<NewsArticle> articles)
+            {
+                return articles;
+            }
 
-            var jsonString = await response.Content.ReadAsStringAsync();
-
-            var apiResponse = JsonConvert.DeserializeObject<NewsApiResponse>(jsonString);
-
-            var filteredResults = apiResponse.Results.ToList();
-
-            return filteredResults;
+            return new List<NewsArticle>();
         }
-
 
     }
 }
