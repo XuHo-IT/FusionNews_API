@@ -1,5 +1,7 @@
 ﻿using Application.Entities.Base;
 using Application.Interfaces.IServices;
+using FusionNews_API.DTOs.Post;
+using FusionNews_API.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,8 +21,19 @@ namespace FusionNews_API.Controllers
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Post>>> GetPosts()
         {
-            var respone = await _postService.GetAllPosts();
-            return Ok(respone);
+            var posts = await _postService.GetAllPosts(); 
+
+            return Ok(posts.ToList());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Post>> CreatePost([FromBody] CreatePostDto postDto)
+        {
+            var postModel = postDto.ToPostFromCreate();
+            await _postService.CreatePost(postModel);
+
+            //return CreatedAtAction(nameof(GetPosts), new { id = post.PostId }, post);
+            return Ok(postModel);
         }
     }
 }
