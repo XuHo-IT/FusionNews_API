@@ -26,16 +26,46 @@ namespace FusionNews_API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPosts()
+        [HttpGet("get-all-post")]
+        public async Task<IActionResult> GetAllPosts()
         {
-            var result = await _postService.GetAllPosts();
+            try
+            {
+                var result = await _postService.GetAllPosts();
 
-            return Ok(result);
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.isSuccess = true;
+                _response.Result = result;
+
+                _log.LogiInfo($"Get all post successfully at {DateTime.Now}.");
+
+                return Ok(_response);
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handling HTTP request errors (e.g., API issues)
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.isSuccess = false;
+                _response.ErrorMessages.Add($"News API error: {ex.Message}");
+
+                _log.LogError($"News fetch failed at {DateTime.Now}. Error: {ex.Message}");
+
+                return BadRequest(_response);
+            }
+            catch (Exception ex)
+            {
+                // Catching unexpected errors
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.isSuccess = false;
+                _response.ErrorMessages.Add($"Unexpected error: {ex.Message}");
+
+                _log.LogError($"Unexpected error during post creation at {DateTime.Now}. Error: {ex.Message}");
+
+                return StatusCode(500, _response);
+            }
         }
 
-        [HttpPost]
-        [HttpPost]
+        [HttpPost("create-post")]
         public async Task<ActionResult> CreatePost([FromBody] CreatePostDto postCreateDto)
         {
             try
