@@ -1,11 +1,16 @@
 using Common.Middleware;
 using FusionNews_API.Data;
 using FusionNews_API.Helpers;
-using FusionNews_API.Models;
 using FusionNews_API.WebExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using FusionNews_API.Services.Jwt; //Added to initialize JWT key
+
+using Application.Entities.Base;
+using FusionNews_API.Services.Jwt;
+using Application.Interfaces.IRepositories;
+using Infrastructure.EntityFramework.Repositories;
+using Application.Interfaces.IServices;
+using Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +22,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddService();
 builder.Services.AddRepository();
