@@ -1,6 +1,7 @@
 ﻿using Application.Entities.Base;
 using Application.Interfaces.IRepositories;
 using Dapper;
+using Infrastructure.EntityFramework.Consts;
 using Infrastructure.EntityFramework.DataAccess;
 using Newtonsoft.Json;
 using System.Data;
@@ -17,10 +18,15 @@ namespace Infrastructure.EntityFramework.Repositories
                 var jInput = JsonConvert.SerializeObject(postModel);
                 parameters.Add("@JInput", jInput, DbType.String);
                 var result = await connection.QueryFirstOrDefaultAsync<Post>(
-                    "SELECT * FROM usp_create_post(@JInput::jsonb)",
+                    StoredExecFunction.CreatePost,
                     param: parameters,
                     commandType: CommandType.Text
                 );
+
+                if (result == null)
+                {
+                    throw new Exception("Post creation failed.");
+                }
 
                 return result;
             });
@@ -28,16 +34,16 @@ namespace Infrastructure.EntityFramework.Repositories
 
         public async Task<List<Post>> GetAllPosts()
         {
-            //return await WithConnection(async connection =>
-            //{
-            //    var result = await connection.QueryAsync<Post>(
-            //        StoredQueryExecFunctionName.GetAllPosts,
-            //        commandType: CommandType.Text 
-            //    );
+            return await WithConnection(async connection =>
+            {
+                var result = await connection.QueryAsync<Post>(
+                    StoredExecFunction.GetAllPosts, 
+                    commandType: CommandType.Text     
+                );
 
-            //    return result.ToList();
-            //});
-            throw new NotImplementedException("GetAllPosts method is not implemented yet.");
+                return result.ToList(); 
+            });
         }
+
     }
 }

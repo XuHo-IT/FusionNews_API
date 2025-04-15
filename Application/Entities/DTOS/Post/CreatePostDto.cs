@@ -10,8 +10,5 @@ namespace FusionNews_API.DTOs.Post
         [Required]
         public string Content { get; set; } = string.Empty;
         public int? NewsOfPostId { get; set; }
-
-
-
     }
 }
