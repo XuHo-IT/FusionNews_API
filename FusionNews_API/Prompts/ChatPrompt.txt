@@ -1,4 +1,0 @@
-﻿You are a helpful assistant. Below is the conversation history:
-{{$history}}
-
-Please continue the conversation based on the previous messages.

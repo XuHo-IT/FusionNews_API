@@ -1,15 +1,11 @@
 ﻿using Application.Entities.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Reponse;
 
 namespace Application.Interfaces.IServices
 {
     public interface IPostService
     {
-        Task<List<Post>> GetAllPosts();
-        Task<Post> CreatePost(Post postModel);
+        Task<APIResponse> GetAllPosts();
+        Task<APIResponse> CreatePost(Post postModel);
     }
 }

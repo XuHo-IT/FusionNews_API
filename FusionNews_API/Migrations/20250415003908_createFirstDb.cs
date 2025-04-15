@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FusionNews_API.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateMigration : Migration
+    public partial class createFirstDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,7 +50,7 @@ namespace FusionNews_API.Migrations
                     title = table.Column<string>(type: "text", nullable: false),
                     content = table.Column<string>(type: "text", nullable: false),
                     news_of_post_id = table.Column<int>(type: "integer", nullable: true),
-                    created_on = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
+                    created_on = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,8 +116,7 @@ namespace FusionNews_API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_post_news_of_post_id",
                 table: "post",
-                column: "news_of_post_id",
-                unique: true);
+                column: "news_of_post_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_post_tag_tag_id",

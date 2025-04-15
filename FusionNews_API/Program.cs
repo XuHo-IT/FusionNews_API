@@ -1,8 +1,8 @@
 using Common.Middleware;
 using FusionNews_API.Data;
+using FusionNews_API.Helpers;
 using FusionNews_API.WebExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddService();
 builder.Services.AddRepository();
-
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
