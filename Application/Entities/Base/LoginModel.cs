@@ -1,4 +1,4 @@
-﻿namespace FusionNews_API.Models
+﻿namespace Application.Entities.Base
 {
     public class LoginModel
     {

@@ -5,9 +5,12 @@ namespace FusionNews_API.Data
 {
     public class ApplicationDBContext(DbContextOptions options) : DbContext(options)
     {
+
+        public DbSet<User> Users { get; set; } //New DB set
+
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Post> Post { get; set; }
-        public DbSet<PostTag> PostTags { get; set; } 
+        public DbSet<PostTag> PostTags { get; set; }
         public DbSet<NewsOfPost> NewsOfPosts { get; set; }
         public DbSet<CommentOfPost> Comments { get; set; }
 
@@ -35,7 +38,7 @@ namespace FusionNews_API.Data
 
                 entity.HasOne(p => p.NewsOfPost)
                     .WithMany(n => n.Posts) // Relation 1-n
-                    .HasForeignKey(p => p.NewsOfPostId) 
+                    .HasForeignKey(p => p.NewsOfPostId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
 
@@ -82,6 +85,20 @@ namespace FusionNews_API.Data
                 entity.HasOne(c => c.Post)
                       .WithMany(p => p.Comments)
                       .HasForeignKey(c => c.PostId);
+            });
+
+            base.OnModelCreating(modelBuilder);
+
+            //User
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("users"); // tên bảng viết thường
+
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.Id).HasColumnName("id");
+                entity.Property(u => u.Username).HasColumnName("username");
+                entity.Property(u => u.Email).HasColumnName("email");
+                entity.Property(u => u.PasswordHash).HasColumnName("password_hash"); // 👈 QUAN TRỌNG
             });
 
             base.OnModelCreating(modelBuilder);
