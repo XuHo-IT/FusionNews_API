@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using FusionNews_API.Models;
+using Application.Entities.Base;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FusionNews_API.Services.Jwt
