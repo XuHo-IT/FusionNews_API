@@ -8,16 +8,12 @@
 
   <ItemGroup>
     <Compile Remove="Error\**" />
-    <Compile Remove="Helpers\**" />
     <Compile Remove="Middleware\**" />
     <Content Remove="Error\**" />
-    <Content Remove="Helpers\**" />
     <Content Remove="Middleware\**" />
     <EmbeddedResource Remove="Error\**" />
-    <EmbeddedResource Remove="Helpers\**" />
     <EmbeddedResource Remove="Middleware\**" />
     <None Remove="Error\**" />
-    <None Remove="Helpers\**" />
     <None Remove="Middleware\**" />
   </ItemGroup>
 
@@ -26,6 +22,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.44.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
