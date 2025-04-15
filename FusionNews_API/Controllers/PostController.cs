@@ -1,9 +1,11 @@
 ﻿using Application.Entities.Base;
 using Application.Interfaces.IServices;
+using Application.Interfaces.Services;
+using Application.Reponse;
+using AutoMapper;
 using FusionNews_API.DTOs.Post;
-using FusionNews_API.Mappers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace FusionNews_API.Controllers
 {
@@ -12,28 +14,66 @@ namespace FusionNews_API.Controllers
     public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
+        private readonly APIResponse _response;
+        private readonly ILogService _log;
+        private readonly IMapper _mapper;
 
-        public PostController(IPostService postService)
+        public PostController(IPostService postService, ILogService log, IMapper mapper)
         {
             _postService = postService;
+            _response = new APIResponse();
+            _log = log;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Post>>> GetPosts()
+        public async Task<IActionResult> GetPosts()
         {
-            var posts = await _postService.GetAllPosts(); 
+            var result = await _postService.GetAllPosts();
 
-            return Ok(posts.ToList());
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Post>> CreatePost([FromBody] CreatePostDto postDto)
+        [HttpPost]
+        public async Task<ActionResult> CreatePost([FromBody] CreatePostDto postCreateDto)
         {
-            var postModel = postDto.ToPostFromCreate();
-            await _postService.CreatePost(postModel);
+            try
+            {
+                Post postmodel = _mapper.Map<Post>(postCreateDto);
+                var postcreate = await _postService.CreatePost(postmodel);
 
-            //return CreatedAtAction(nameof(GetPosts), new { id = post.PostId }, post);
-            return Ok(postModel);
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.isSuccess = true;
+                _response.Result = postcreate;
+
+                _log.LogiInfo($"Post created successfully at {DateTime.Now}. PostId: {postCreateDto.NewsOfPostId}");
+
+                return Ok(_response);
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handling HTTP request errors (e.g., API issues)
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.isSuccess = false;
+                _response.ErrorMessages.Add($"News API error: {ex.Message}");
+
+                _log.LogError($"News fetch failed at {DateTime.Now}. Error: {ex.Message}");
+
+                return BadRequest(_response);
+            }
+            catch (Exception ex)
+            {
+                // Catching unexpected errors
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.isSuccess = false;
+                _response.ErrorMessages.Add($"Unexpected error: {ex.Message}");
+
+                _log.LogError($"Unexpected error during post creation at {DateTime.Now}. Error: {ex.Message}");
+
+                return StatusCode(500, _response);
+            }
         }
+
     }
 }
