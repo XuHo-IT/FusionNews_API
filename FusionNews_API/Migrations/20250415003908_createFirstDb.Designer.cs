@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FusionNews_API.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250414141804_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250415003908_createFirstDb")]
+    partial class createFirstDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
