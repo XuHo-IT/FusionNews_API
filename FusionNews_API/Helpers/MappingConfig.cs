@@ -1,4 +1,5 @@
 ﻿using Application.Entities.Base;
+using Application.Entities.DTOS.ChatBotQuestion;
 using AutoMapper;
 using FusionNews_API.DTOs.Post;
 
@@ -8,8 +9,8 @@ namespace FusionNews_API.Helpers
     {
         public MappingConfig()
         {
-            CreateMap<Post, CreatePostDto>();
             CreateMap<Post, CreatePostDto>().ReverseMap();
+            CreateMap<ChatbotQuestion, ChatbotQuestionCreateDTO>().ReverseMap();
         }
     }
 }

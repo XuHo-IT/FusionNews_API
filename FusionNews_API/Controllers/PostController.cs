@@ -33,23 +33,16 @@ namespace FusionNews_API.Controllers
 
             return Ok(result);
         }
-
-        [HttpPost]
         [HttpPost]
         public async Task<ActionResult> CreatePost([FromBody] CreatePostDto postCreateDto)
         {
             try
             {
                 Post postmodel = _mapper.Map<Post>(postCreateDto);
-                var postcreate = await _postService.CreatePost(postmodel);
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.isSuccess = true;
-                _response.Result = postcreate;
-
+                var response = await _postService.CreatePost(postmodel);
                 _log.LogiInfo($"Post created successfully at {DateTime.Now}. PostId: {postCreateDto.NewsOfPostId}");
 
-                return Ok(_response);
+                return StatusCode((int)response.StatusCode, response);
             }
             catch (HttpRequestException ex)
             {

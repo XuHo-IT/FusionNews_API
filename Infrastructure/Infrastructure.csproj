@@ -16,6 +16,7 @@
     <Folder Include="EntityFramework\Consts\" />
     <Folder Include="Extensions\" />
 	  <PackageReference Include="Dapper" Version="2.1.35" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
 	  <PackageReference Include="Microsoft.SemanticKernel" Version="1.*" />
 	  <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.*" />
