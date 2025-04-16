@@ -119,7 +119,8 @@ RETURNS TABLE(
 	title varchar(100), 
 	content text, 
 	newsofpostid int, 
-	createat timestamp with time zone -- timestamp with time zone = TIMESTAMPTZ
+	createat TIMESTAMPTZ, -- timestamp with time zone = TIMESTAMPTZ
+    updateat TIMESTAMPTZ 
 	)AS $$
 BEGIN
     RETURN QUERY
@@ -128,7 +129,8 @@ BEGIN
         post.title::VARCHAR,
         post.content,
         post.news_of_post_id,
-        post.create_at
+        post.create_at,
+        post.update_at
     FROM post;
 END;
 $$ LANGUAGE plpgsql;
@@ -140,7 +142,8 @@ RETURNS TABLE(
 	title varchar(100), 
 	content text, 
 	newsofpostid int, 
-	createat timestamp with time zone
+	createat TIMESTAMPTZ,
+    updateat TIMESTAMPTZ 
 )AS $$
 DECLARE
     id INT;
@@ -151,11 +154,12 @@ BEGIN
     -- Query the 'post' table based on the extracted id
     RETURN QUERY
     SELECT 
-        post.post_id::INTEGER,
+        post.post_id,
         post.title::VARCHAR,
-        post.content::TEXT, -- Corrected to match TEXT type
-        post.news_of_post_id::INTEGER,
-        post.create_at::TIMESTAMP WITH TIME ZONE
+        post.content, -- Corrected to match TEXT type
+        post.news_of_post_id,
+        post.create_at,
+        post.update_at
     FROM post
     WHERE post.post_id = id;
 END;
@@ -168,7 +172,7 @@ AS $$
 DECLARE
     title varchar(100);
     content TEXT ;
-	newsof_post_id int;
+	news_of_post_id int;
 BEGIN
     -- Trích xuất các giá trị từ JSON
     title := json_input->>'Title';
@@ -189,7 +193,7 @@ $$ LANGUAGE plpgsql;
 
 -- Update Post
 CREATE OR REPLACE FUNCTION usf_update_post(json_input jsonb)
-RETURNS TABLE (postid int, title text, content text)
+RETURNS TABLE (postid int, title text, content text, create_at TIMESTAMPTZ, update_at TIMESTAMPTZ)
 AS $$
 DECLARE
     u_post_id int;
@@ -205,13 +209,8 @@ BEGIN
     UPDATE post p
     SET 
         title = COALESCE(u_title, p.title), 
-        content = COALESCE(u_content, p.content)
-    WHERE p.post_id = u_post_id;
-
-    -- Trả về bản ghi sau khi cập nhật
-    RETURN QUERY 
-    SELECT p.post_id, p.title, p.content
-    FROM post p
+        content = COALESCE(u_content, p.content),
+        update_at = NOW()
     WHERE p.post_id = u_post_id;
 END;
 $$ LANGUAGE plpgsql;

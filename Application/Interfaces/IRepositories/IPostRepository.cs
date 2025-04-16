@@ -13,6 +13,6 @@ namespace Application.Interfaces.IRepositories
         Task<Post> CreatePostAsync(Post postModel);
         Task<Post> GetPostByIdAsync(int id);
         Task<Post> UpdatePostAsync(Post postModel);
-        Task<Post> DeletePostAsync(int id);
+        Task DeletePostAsync(int id);
     }
 }

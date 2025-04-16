@@ -117,19 +117,11 @@ namespace FusionNews_API.Services.Posts
 
             try
             {
-                var post = await _postRepository.DeletePostAsync(id);
-                if (post is null)
-                {
-                    response.StatusCode = HttpStatusCode.NotFound;
-                    response.isSuccess = false;
-                    response.ErrorMessages.Add("Post not found");
-                }
-                else
-                {
-                    response.Result = post;
-                    response.StatusCode = HttpStatusCode.OK;
-                    response.isSuccess = true;
-                }
+                await _postRepository.DeletePostAsync(id);
+ 
+                //response.Result = null;
+                response.StatusCode = HttpStatusCode.OK;
+                response.isSuccess = true;
             }
             catch (Exception ex)
             {

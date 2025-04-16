@@ -91,25 +91,23 @@ namespace Infrastructure.EntityFramework.Repositories
             });
         }
 
-        public async Task<Post> DeletePostAsync(int id)
+        public async Task DeletePostAsync(int id)
         {
-            return await WithConnection(async connection =>
+            await WithConnection(async connection =>
             {
                 var parameters = new DynamicParameters();
                 var jInput = JsonConvert.SerializeObject(new { id });
                 parameters.Add("@JInput", jInput, DbType.String);
-                var result = await connection.QueryFirstOrDefaultAsync<Post>(
+                var result = await connection.ExecuteAsync(
                     StoredExecFunction.DeletePost,
                     param: parameters,
                     commandType: CommandType.Text
                 );
 
-                if (result == null)
+                if (result == 0)
                 {
                     throw new Exception("Delete post failed.");
                 }
-
-                return result;
             });
         }
     }
