@@ -23,13 +23,9 @@ namespace FusionNews_API.Controllers
         {
             try
             {
-                var newsData = await _newsService.GetNewsAsync();
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.isSuccess = true;
-                _response.Result = newsData;
+                var response = await _newsService.GetNewsAsync();
                 _log.LogiInfo("News fetched at " + DateTime.Now);
-                return Ok(_response);
+                return StatusCode((int)response.StatusCode, response);
             }
             catch (HttpRequestException ex)
             {
