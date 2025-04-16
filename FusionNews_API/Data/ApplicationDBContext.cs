@@ -5,6 +5,9 @@ namespace FusionNews_API.Data
 {
     public class ApplicationDBContext(DbContextOptions options) : DbContext(options)
     {
+
+        public DbSet<User> Users { get; set; } //New DB set
+
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Post> Post { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
@@ -97,6 +100,20 @@ namespace FusionNews_API.Data
                 entity.Property(t => t.CreateAt).HasColumnName("create_at");
                 entity.Property(t => t.UpdateAt).HasColumnName("update_at");
 
+            });
+
+            base.OnModelCreating(modelBuilder);
+
+            //User
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("users"); // tên bảng viết thường
+
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.Id).HasColumnName("id");
+                entity.Property(u => u.Username).HasColumnName("username");
+                entity.Property(u => u.Email).HasColumnName("email");
+                entity.Property(u => u.PasswordHash).HasColumnName("password_hash"); // 👈 QUAN TRỌNG
             });
 
             base.OnModelCreating(modelBuilder);
