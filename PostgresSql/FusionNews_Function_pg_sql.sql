@@ -119,7 +119,7 @@ RETURNS TABLE(
 	title varchar(100), 
 	content text, 
 	newsofpostid int, 
-	createdon timestamp with time zone
+	createat timestamp with time zone -- timestamp with time zone = TIMESTAMPTZ
 	)AS $$
 BEGIN
     RETURN QUERY
@@ -128,7 +128,7 @@ BEGIN
         post.title::VARCHAR,
         post.content,
         post.news_of_post_id,
-        post.created_on
+        post.create_at
     FROM post;
 END;
 $$ LANGUAGE plpgsql;
@@ -140,7 +140,7 @@ RETURNS TABLE(
 	title varchar(100), 
 	content text, 
 	newsofpostid int, 
-	createdon timestamp with time zone
+	createat timestamp with time zone
 )AS $$
 DECLARE
     id INT;
@@ -155,7 +155,7 @@ BEGIN
         post.title::VARCHAR,
         post.content::TEXT, -- Corrected to match TEXT type
         post.news_of_post_id::INTEGER,
-        post.created_on::TIMESTAMP WITH TIME ZONE
+        post.create_at::TIMESTAMP WITH TIME ZONE
     FROM post
     WHERE post.post_id = id;
 END;
@@ -177,10 +177,10 @@ BEGIN
 
     -- Kiểm tra nếu dữ liệu hợp lệ
     IF news_of_post_id IS NULL THEN
-        INSERT INTO post (title, content, created_on)
+        INSERT INTO post (title, content, create_at)
         VALUES (title, content, NOW());
     ELSE
-        INSERT INTO post (title, content, news_of_post_id, created_on)
+        INSERT INTO post (title, content, news_of_post_id, create_at)
         VALUES (title, content, news_of_post_id, NOW());
     END IF;
 
