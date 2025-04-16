@@ -24,11 +24,11 @@ namespace FusionNews_API.Controllers
         {
             try
             {
-                var newsData = await _newsService.GetNewsAsync(filterOn, filterRequest, pageNumber, pageSize);
+                var response = await _newsService.GetNewsAsync(filterOn, filterRequest, pageNumber, pageSize);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.isSuccess = true;
-                _response.Result = newsData;
+                _response.Result = response;
                 _log.LogiInfo("News fetched at " + DateTime.Now);
                 return StatusCode((int)response.StatusCode, response);
             }
