@@ -15,13 +15,13 @@ namespace FusionNews_API.Services.Posts
             _postRepository = postRepository;
         }
 
-        public async Task<APIResponse> CreatePost(Post postModel)
+        public async Task<APIResponse> CreatePostAsync(Post postModel)
         {
             var response = new APIResponse();
 
             try
             {
-                var articles = await _postRepository.CreatePost(postModel);
+                var articles = await _postRepository.CreatePostAsync(postModel);
 
                 response.Result = articles;
                 response.StatusCode = HttpStatusCode.OK;
@@ -37,18 +37,99 @@ namespace FusionNews_API.Services.Posts
             return response;
         }
 
-
-        public async Task<APIResponse> GetAllPosts()
+        public async Task<APIResponse> GetPostByIdAsync(int id)
         {
             var response = new APIResponse();
 
             try
             {
-                var articles = await _postRepository.GetAllPosts();
+                var post = await _postRepository.GetPostByIdAsync(id);
+                if (post is null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.isSuccess = false;
+                    response.ErrorMessages.Add("Post not found");
+                }
+                else
+                {
+                    response.Result = post;
+                    response.StatusCode = HttpStatusCode.OK;
+                    response.isSuccess = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.isSuccess = false;
+                response.ErrorMessages.Add(ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<APIResponse> GetPostsAsync()
+        {
+            var response = new APIResponse();
+
+            try
+            {
+                var posts = await _postRepository.GetPostsAsync();
+
+                response.Result = posts;
+                response.StatusCode = HttpStatusCode.OK;
+                response.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.isSuccess = false;
+                response.ErrorMessages.Add(ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<APIResponse> UpdatePostAsync(int id, Post postModel)
+        {
+            var response = new APIResponse();
+
+            try
+            {
+                var articles = await _postRepository.UpdatePostAsync(id, postModel);
 
                 response.Result = articles;
                 response.StatusCode = HttpStatusCode.OK;
                 response.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.isSuccess = false;
+                response.ErrorMessages.Add(ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<APIResponse> DeletePostAsync(int id)
+        {
+            var response = new APIResponse();
+
+            try
+            {
+                var post = await _postRepository.DeletePostAsync(id);
+                if (post is null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.isSuccess = false;
+                    response.ErrorMessages.Add("Post not found");
+                }
+                else
+                {
+                    response.Result = post;
+                    response.StatusCode = HttpStatusCode.OK;
+                    response.isSuccess = true;
+                }
             }
             catch (Exception ex)
             {
