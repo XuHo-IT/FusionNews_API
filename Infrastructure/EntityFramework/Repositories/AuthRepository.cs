@@ -2,7 +2,7 @@
 using Application.Interfaces.IRepositories;
 using Dapper;
 using Infrastructure.EntityFramework.Const;
-using Infrastructure.EntityFramework.DataAccess;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Data;
 
@@ -10,6 +10,7 @@ namespace Infrastructure.EntityFramework.Repositories
 {
     public class AuthRepository : DapperBase, IAuthRepository
     {
+        public AuthRepository(IConfiguration configuration) : base(configuration) { }
         public async Task AddUserAsync(User user)
         {
             await WithConnection(async connection =>
