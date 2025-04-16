@@ -89,13 +89,13 @@ namespace FusionNews_API.Services.Posts
             return response;
         }
 
-        public async Task<APIResponse> UpdatePostAsync(int id, Post postModel)
+        public async Task<APIResponse> UpdatePostAsync(Post postModel)
         {
             var response = new APIResponse();
 
             try
             {
-                var articles = await _postRepository.UpdatePostAsync(id, postModel);
+                var articles = await _postRepository.UpdatePostAsync(postModel);
 
                 response.Result = articles;
                 response.StatusCode = HttpStatusCode.OK;
