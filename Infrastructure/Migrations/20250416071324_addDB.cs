@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace FusionNews_API.Migrations
+namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class addDB : Migration
@@ -16,7 +16,7 @@ namespace FusionNews_API.Migrations
                 name: "chatbot_question",
                 columns: table => new
                 {
-                    tag_id = table.Column<int>(type: "integer", nullable: false)
+                    question_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     question = table.Column<string>(type: "text", nullable: false),
                     answer = table.Column<string>(type: "text", nullable: false),
@@ -25,7 +25,7 @@ namespace FusionNews_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_chatbot_question", x => x.tag_id);
+                    table.PrimaryKey("PK_chatbot_question", x => x.question_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,6 +55,21 @@ namespace FusionNews_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_tag", x => x.tag_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    username = table.Column<string>(type: "text", nullable: false),
+                    password_hash = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,6 +166,9 @@ namespace FusionNews_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "post_tag");
+
+            migrationBuilder.DropTable(
+                name: "users");
 
             migrationBuilder.DropTable(
                 name: "post");
