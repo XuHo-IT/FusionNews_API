@@ -9,10 +9,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace FusionNews_API.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250415083803_addDB")]
+    [Migration("20250416071324_addDB")]
     partial class addDB
     {
         /// <inheritdoc />
@@ -27,12 +27,12 @@ namespace FusionNews_API.Migrations
 
             modelBuilder.Entity("Application.Entities.Base.ChatbotQuestion", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("QuestionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("tag_id");
+                        .HasColumnName("question_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("QuestionId"));
 
                     b.Property<string>("Answer")
                         .IsRequired()
@@ -52,7 +52,7 @@ namespace FusionNews_API.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("QuestionId");
 
                     b.ToTable("chatbot_question", (string)null);
                 });
@@ -188,6 +188,35 @@ namespace FusionNews_API.Migrations
                     b.HasKey("TagId");
 
                     b.ToTable("tag", (string)null);
+                });
+
+            modelBuilder.Entity("Application.Entities.Base.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("Application.Entities.Base.CommentOfPost", b =>
