@@ -30,7 +30,7 @@ namespace FusionNews_API.Controllers
         [HttpGet("get-all-post")]
         public async Task<IActionResult> GetAllPosts()
         {
-            var result = await _postService.GetAllPosts();
+            var result = await _postService.GetPostsAsync();
 
             return Ok(result);
         }
@@ -40,7 +40,7 @@ namespace FusionNews_API.Controllers
             try
             {
                 Post postmodel = _mapper.Map<Post>(postCreateDto);
-                var response = await _postService.CreatePost(postmodel);
+                var response = await _postService.CreatePostAsync(postmodel);
                 _log.LogiInfo($"Post created successfully at {DateTime.Now}. PostId: {postCreateDto.NewsOfPostId}");
 
                 return StatusCode((int)response.StatusCode, response);
