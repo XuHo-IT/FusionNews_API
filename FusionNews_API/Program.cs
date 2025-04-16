@@ -2,7 +2,15 @@ using Common.Middleware;
 using FusionNews_API.Data;
 using FusionNews_API.Helpers;
 using FusionNews_API.WebExtensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
+using Application.Entities.Base;
+using FusionNews_API.Services.Jwt;
+using Application.Interfaces.IRepositories;
+using Infrastructure.EntityFramework.Repositories;
+using Application.Interfaces.IServices;
+using Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +21,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddSingleton<JwtService>();
 builder.Services.AddService();
 builder.Services.AddRepository();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
@@ -32,6 +47,16 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+
+//Builder Service for UserDBContext
+builder.Services.AddDbContext<UserDbContext>(options =>
+{
+    options.UseNpgsql("Host=localhost;Port=5432;Username=sa;Password=123456;Database=FusionNewsDB");
+});
+
+
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
