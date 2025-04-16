@@ -50,5 +50,16 @@ namespace FusionNews_API.Controllers
             }
         }
 
+        [HttpGet("get-news-by-article-id")]
+        public async Task<ActionResult> GetNewsById(string articleId)
+        {
+            return Ok();
+        }
+
+        [HttpGet("get-news-by-id-in-database")]
+        public async Task<ActionResult> GetNewsById(int NewsOfPostId)
+        {
+            return Ok();
+        }
     }
 }

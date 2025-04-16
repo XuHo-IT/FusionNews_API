@@ -110,3 +110,61 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+------------------------------------------- Post Function -------------------------------------------  
+CREATE OR REPLACE FUNCTION usp_create_post(json_input JSONB)
+RETURNS VOID AS $$
+DECLARE
+    title TEXT;
+    content TEXT;
+BEGIN
+    -- Trích xuất các giá trị từ JSON
+    title := json_input->>'Title';
+    content := json_input->>'Content';
+
+    -- Kiểm tra nếu dữ liệu hợp lệ
+    IF title IS NULL OR content IS NULL THEN
+        RAISE EXCEPTION 'Invalid input: Title and Content are required';
+    END IF;
+
+    -- Chèn vào bảng Post
+    INSERT INTO post (title, content, created_on)
+    VALUES (title, content, NOW());
+END;
+$$ LANGUAGE plpgsql;
+
+-- Update Post
+CREATE OR REPLACE FUNCTION usf_update_post(json_input jsonb)
+returns void
+AS $$
+DECLARE
+    post_id int,
+    title varchar(100);
+    content TEXT ;
+BEGIN
+    -- Trích xuất các giá trị từ JSON
+    post_id := (json_input->>'PostId')::INT;
+    title := json_input->>'Title';
+    content := json_input->>'Content';
+    UPDATE post
+        SET
+            title = COALESCE(title, title), -- Chỉ cập nhật nếu không NULL
+            content = COALESCE(content, content),
+        WHERE post_id = post_id;
+END;
+$$ LANGUAGE plpgsql;
+ 
+-- Delete Post
+CREATE OR REPLACE FUNCTION usf_delete_post(json_input jsonb)
+RETURNS void
+AS $$
+DECLARE
+    id INT;
+BEGIN
+    -- Extract the 'id' value from the JSON input
+    id := (json_input->>'id')::INT;
+ 
+    DELETE FROM post
+    WHERE post_id
+END;
+$$ LANGUAGE plpgsql;
