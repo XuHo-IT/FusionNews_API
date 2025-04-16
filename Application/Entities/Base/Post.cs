@@ -12,7 +12,8 @@ namespace Application.Entities.Base
 
         public int? NewsOfPostId { get; set; } 
 
-        public DateTime CreateAt { get; set; } 
+        public DateTime CreateAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
         public ICollection<PostTag>? PostTags { get; set; }
         public List<CommentOfPost>? Comments { get; set; }
         public NewsOfPost? NewsOfPost { get; set; }
