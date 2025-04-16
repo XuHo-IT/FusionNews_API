@@ -1,6 +1,6 @@
-﻿namespace Application.Entities.Base
+﻿namespace Application.Entities.DTOS.User
 {
-    public class RegisterModel
+    public class UserRegisterDTO
     {
         public string Username { get; set; }
         public string Email { get; set; }

@@ -1,15 +1,11 @@
-﻿using Application.Interfaces.IRepositories;
+﻿using Application.Entities.Base;
+using Application.Entities.DTOS.User;
+using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServices;
 using Application.Reponse;
-using Application.Entities.Base;
 using FusionNews_API.Services.Jwt;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -26,7 +22,7 @@ namespace Infrastructure.Services
             _jwtService = jwtService;
         }
 
-        public async Task<APIResponse> RegisterAsync(RegisterModel model)
+        public async Task<APIResponse> RegisterAsync(UserRegisterDTO model)
         {
             var response = new APIResponse();
 
@@ -53,7 +49,7 @@ namespace Infrastructure.Services
             return response;
         }
 
-        public async Task<APIResponse> LoginAsync(LoginModel model)
+        public async Task<APIResponse> LoginAsync(UserLoginDTO model)
         {
             var response = new APIResponse();
             var user = await _authRepo.GetUserByUsernameAsync(model.Username);
