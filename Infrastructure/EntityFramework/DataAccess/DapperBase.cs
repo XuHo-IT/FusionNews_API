@@ -1,22 +1,28 @@
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
 
-namespace Infrastructure.EntityFramework.DataAccess
+public abstract class DapperBase
 {
-    public abstract class DapperBase
-    {
-        protected async Task<T> WithConnection<T>(Func<IDbConnection, Task<T>> func)
-        {
-            await using var connection = new NpgsqlConnection(Environment.GetEnvironmentVariable("POSTGRE_CONNECTION_STRING"));
-            await connection.OpenAsync().ConfigureAwait(false);
-            return await func(connection).ConfigureAwait(false);
-        }
+    private readonly string _connectionString;
 
-        protected async Task WithConnection(Func<IDbConnection, Task> func)
-        {
-            await using var connection = new NpgsqlConnection(Environment.GetEnvironmentVariable("POSTGRE_CONNECTION_STRING"));
-            await connection.OpenAsync().ConfigureAwait(false);
-            await func(connection).ConfigureAwait(false);
-        }
+    protected DapperBase(IConfiguration configuration)
+    {
+        _connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string not found.");
+    }
+
+    protected async Task<T> WithConnection<T>(Func<IDbConnection, Task<T>> func)
+    {
+        await using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync().ConfigureAwait(false);
+        return await func(connection).ConfigureAwait(false);
+    }
+
+    protected async Task WithConnection(Func<IDbConnection, Task> func)
+    {
+        await using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync().ConfigureAwait(false);
+        await func(connection).ConfigureAwait(false);
     }
 }
