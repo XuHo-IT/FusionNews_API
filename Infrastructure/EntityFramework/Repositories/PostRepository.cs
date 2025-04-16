@@ -2,7 +2,7 @@
 using Application.Interfaces.IRepositories;
 using Dapper;
 using Infrastructure.EntityFramework.Const;
-using Infrastructure.EntityFramework.DataAccess;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Data;
 
@@ -11,6 +11,7 @@ namespace Infrastructure.EntityFramework.Repositories
 {
     public class PostRepository : DapperBase, IPostRepository
     {
+        public PostRepository(IConfiguration configuration) : base(configuration) { }
         public async Task<List<Post>> GetPostsAsync()
         {
             return await WithConnection(async connection =>
