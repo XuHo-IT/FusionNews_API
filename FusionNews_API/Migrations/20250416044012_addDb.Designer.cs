@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FusionNews_API.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250415083803_addDB")]
-    partial class addDB
+    [Migration("20250416044012_addDb")]
+    partial class addDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,38 +24,6 @@ namespace FusionNews_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Application.Entities.Base.ChatbotQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("tag_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("answer");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_at");
-
-                    b.Property<string>("Question")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("question");
-
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("update_at");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("chatbot_question", (string)null);
-                });
 
             modelBuilder.Entity("Application.Entities.Base.CommentOfPost", b =>
                 {
@@ -188,6 +156,35 @@ namespace FusionNews_API.Migrations
                     b.HasKey("TagId");
 
                     b.ToTable("tag", (string)null);
+                });
+
+            modelBuilder.Entity("Application.Entities.Base.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("Application.Entities.Base.CommentOfPost", b =>
