@@ -1,36 +1,49 @@
-﻿using Application.Interfaces.IRepositories;
-using Application.Entities.Base;
-using FusionNews_API.Data;
-using Microsoft.Extensions.Configuration;
-using System.Text;
-using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
+﻿using Application.Entities.Base;
+using Application.Interfaces.IRepositories;
+using Dapper;
+using Infrastructure.EntityFramework.DataAccess;
+using Newtonsoft.Json;
+using System.Data;
 
 namespace Infrastructure.EntityFramework.Repositories
 {
-    public class AuthRepository : IAuthRepository
+    public class AuthRepository : DapperBase, IAuthRepository
     {
-        private readonly UserDbContext _context;
-
-        public AuthRepository(UserDbContext context)
+        public async Task AddUserAsync(User user)
         {
-            _context = context;
+            await WithConnection(async connection =>
+            {
+                var parameters = new DynamicParameters();
+                var jInput = JsonConvert.SerializeObject(user);
+                parameters.Add("@JInput", jInput, DbType.String);
+
+                await connection.ExecuteAsync(
+                    "SELECT usf_add_user(@JInput::jsonb)",
+                    param: parameters,
+                    commandType: CommandType.Text
+                );
+                return 0;
+            });
         }
 
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            return await WithConnection(async connection =>
+            {
+                var query = "SELECT * FROM usf_get_user_by_username(@Username)";
+                return await connection.QueryFirstOrDefaultAsync<User>(query, new { Username = username });
+            });
         }
 
         public async Task<bool> IsUsernameTakenAsync(string username)
         {
-            return await _context.Users.AnyAsync(u => u.Username == username);
-        }
+            return await WithConnection(async connection =>
+            {
 
-        public async Task AddUserAsync(User user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+                var query = "SELECT usf_is_username_taken(@Username)";
+                var result = await connection.ExecuteScalarAsync<int>(query, new { Username = username });
+                return result > 0;
+            });
         }
     }
 }

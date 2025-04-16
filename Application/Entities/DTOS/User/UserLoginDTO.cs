@@ -1,6 +1,6 @@
-﻿namespace Application.Entities.Base
+﻿namespace Application.Entities.DTOS.User
 {
-    public class LoginModel
+    public class UserLoginDTO
     {
         public string Username { get; set; }
         public string Password { get; set; }
