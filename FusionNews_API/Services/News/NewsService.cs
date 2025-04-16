@@ -3,6 +3,7 @@ using Application.Interfaces.IRepositories;
 using Application.Interfaces.Services;
 using Application.Reponse;
 using Common.Constants;
+using FusionNews_API.Helpers;
 using System.Net;
 
 namespace FusionNews_API.Services.News
@@ -24,22 +25,15 @@ namespace FusionNews_API.Services.News
             {
                 var articles = await _newsRepository.FetchNewsAsync();
 
-                // Filtering
-                if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterRequest))
-                {
-                    if (filterOn.Equals("Country", StringComparison.OrdinalIgnoreCase))
-                    {
-                        articles = articles.Where(a => a.Country.Any(c => filterRequest.ToUpper().Contains(c.ToUpper()))).ToList();
-                    }
-                    if (filterOn.Equals("Category", StringComparison.OrdinalIgnoreCase))
-                    {
-                        articles = articles.Where(a => a.Category.Any(c => filterRequest.ToUpper().Contains(c.ToUpper()))).ToList();
-                    }
-                }
+                articles = Util.Filtering(articles, filterOn, filterRequest);
 
-                //Pagination
-                var skip = (pageNumber - 1) * pageSize;
-                articles = articles.Skip(skip).Take(pageSize).ToList();
+                response.currentPage = pageNumber;
+                response.pageSize = pageSize;
+                response.totalRecords = articles.Count();
+                response.totalPages = (int)Math.Ceiling((double)response.totalRecords / pageSize);
+
+                articles = Util.Pagination(pageNumber, pageSize, articles);
+                
 
                 response.Result = articles;
                 response.StatusCode = HttpStatusCode.OK;
