@@ -1,7 +1,14 @@
+using Application.Entities.Base;
+using Application.Interfaces.IRepositories;
+using Application.Interfaces.IServices;
 using Common.Middleware;
-using FusionNews_API.Data;
 using FusionNews_API.Helpers;
+using FusionNews_API.Services.Jwt;
 using FusionNews_API.WebExtensions;
+using Infrastructure.EntityFramework.DataAccess;
+using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,15 +20,36 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddSingleton<JwtService>();
 builder.Services.AddService();
 builder.Services.AddRepository();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
         opts => opts.CommandTimeout(120));
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
+
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
@@ -34,6 +62,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
+
 
 app.UseAuthorization();
 
