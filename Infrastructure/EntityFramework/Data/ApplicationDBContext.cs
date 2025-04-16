@@ -1,7 +1,7 @@
 ﻿using Application.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace FusionNews_API.Data
+namespace Infrastructure.EntityFramework.DataAccess
 {
     public class ApplicationDBContext(DbContextOptions options) : DbContext(options)
     {
