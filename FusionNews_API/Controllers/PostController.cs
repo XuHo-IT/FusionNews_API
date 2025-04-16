@@ -30,57 +30,20 @@ namespace FusionNews_API.Controllers
         [HttpGet("get-all-post")]
         public async Task<IActionResult> GetAllPosts()
         {
-            try
-            {
-                var result = await _postService.GetPostsAsync();
+            var result = await _postService.GetAllPosts();
 
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.isSuccess = true;
-                _response.Result = result;
-
-                _log.LogiInfo($"Get all post successfully at {DateTime.Now}.");
-
-                return Ok(_response);
-            }
-            catch (HttpRequestException ex)
-            {
-                // Handling HTTP request errors (e.g., API issues)
-                _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.isSuccess = false;
-                _response.ErrorMessages.Add($"News API error: {ex.Message}");
-
-                _log.LogError($"News fetch failed at {DateTime.Now}. Error: {ex.Message}");
-
-                return BadRequest(_response);
-            }
-            catch (Exception ex)
-            {
-                // Catching unexpected errors
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.isSuccess = false;
-                _response.ErrorMessages.Add($"Unexpected error: {ex.Message}");
-
-                _log.LogError($"Unexpected error during post creation at {DateTime.Now}. Error: {ex.Message}");
-
-                return StatusCode(500, _response);
-            }
+            return Ok(result);
         }
-
-        [HttpPost("create-post")]
+        [HttpPost]
         public async Task<ActionResult> CreatePost([FromBody] CreatePostDto postCreateDto)
         {
             try
             {
                 Post postmodel = _mapper.Map<Post>(postCreateDto);
-                var postcreate = await _postService.CreatePostAsync(postmodel);
-
-                _response.StatusCode = HttpStatusCode.OK;
-                _response.isSuccess = true;
-                _response.Result = postcreate;
-
+                var response = await _postService.CreatePost(postmodel);
                 _log.LogiInfo($"Post created successfully at {DateTime.Now}. PostId: {postCreateDto.NewsOfPostId}");
 
-                return Ok(_response);
+                return StatusCode((int)response.StatusCode, response);
             }
             catch (HttpRequestException ex)
             {
