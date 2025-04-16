@@ -68,13 +68,17 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("content");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("CreateAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on");
+                        .HasColumnName("create_at");
 
                     b.Property<int>("PostId")
                         .HasColumnType("integer")
                         .HasColumnName("post_id");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_at");
 
                     b.HasKey("CommentId");
 
@@ -131,9 +135,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("content");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("CreateAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on");
+                        .HasColumnName("create_at");
 
                     b.Property<int?>("NewsOfPostId")
                         .HasColumnType("integer")
@@ -143,6 +147,10 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("title");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_at");
 
                     b.HasKey("PostId");
 

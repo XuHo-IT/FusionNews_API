@@ -33,8 +33,9 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        opts => opts.CommandTimeout(120));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    // Run this command in the terminal to generator migration
+    // --> dotnet ef migrations add AddDB  -p ../Infrastructure -s ../FusionNews_Api 
 });
 builder.Services.AddCors(options =>
 {

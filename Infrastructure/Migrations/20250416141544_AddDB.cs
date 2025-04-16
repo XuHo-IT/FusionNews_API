@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addDB : Migration
+    public partial class AddDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,7 +81,8 @@ namespace Infrastructure.Migrations
                     title = table.Column<string>(type: "text", nullable: false),
                     content = table.Column<string>(type: "text", nullable: false),
                     news_of_post_id = table.Column<int>(type: "integer", nullable: true),
-                    created_on = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    create_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    update_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,7 +102,8 @@ namespace Infrastructure.Migrations
                     comment_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     content = table.Column<string>(type: "text", nullable: false),
-                    created_on = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    create_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    update_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     post_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
