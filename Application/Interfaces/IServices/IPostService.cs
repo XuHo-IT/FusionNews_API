@@ -5,7 +5,10 @@ namespace Application.Interfaces.IServices
 {
     public interface IPostService
     {
-        Task<APIResponse> GetAllPosts();
-        Task<APIResponse> CreatePost(Post postModel);
+        Task<APIResponse> GetPostsAsync();
+        Task<APIResponse> CreatePostAsync(Post postModel);
+        Task<APIResponse> GetPostByIdAsync(int id);
+        Task<APIResponse> UpdatePostAsync(Post postModel);
+        Task<APIResponse> DeletePostAsync(int id);
     }
 }
