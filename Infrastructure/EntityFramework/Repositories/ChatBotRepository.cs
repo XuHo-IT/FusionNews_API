@@ -1,6 +1,7 @@
 ﻿using Application.Entities.Base;
 using Application.Interfaces.IRepositories;
 using Dapper;
+using Infrastructure.EntityFramework.Const;
 using Infrastructure.EntityFramework.DataAccess;
 using Newtonsoft.Json;
 using System.Data;
@@ -18,7 +19,7 @@ namespace Infrastructure.EntityFramework.Repositories
                 parameters.Add("@JInput", jInput, DbType.String);
 
                 await connection.ExecuteAsync(
-                    "SELECT usf_create_question(@JInput::jsonb)",
+                     StoredExecFunction.CreateQuestion,
                     param: parameters,
                     commandType: CommandType.Text
                 );
@@ -32,7 +33,7 @@ namespace Infrastructure.EntityFramework.Repositories
             return await WithConnection(async connection =>
             {
                 var result = await connection.QueryAsync<ChatbotQuestion>(
-                    "SELECT * FROM usf_get_all_questions()",
+                    StoredExecFunction.GetAllQuestions,
                     commandType: CommandType.Text
                 );
 
