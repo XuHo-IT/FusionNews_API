@@ -7,9 +7,11 @@ namespace FusionNews_API.Data
     {
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Post> Post { get; set; }
-        public DbSet<PostTag> PostTags { get; set; } 
+        public DbSet<PostTag> PostTags { get; set; }
         public DbSet<NewsOfPost> NewsOfPosts { get; set; }
         public DbSet<CommentOfPost> Comments { get; set; }
+        public DbSet<ChatbotQuestion> ChatbotQuestions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,7 +37,7 @@ namespace FusionNews_API.Data
 
                 entity.HasOne(p => p.NewsOfPost)
                     .WithMany(n => n.Posts) // Relation 1-n
-                    .HasForeignKey(p => p.NewsOfPostId) 
+                    .HasForeignKey(p => p.NewsOfPostId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
 
@@ -82,6 +84,19 @@ namespace FusionNews_API.Data
                 entity.HasOne(c => c.Post)
                       .WithMany(p => p.Comments)
                       .HasForeignKey(c => c.PostId);
+            });
+
+            //ChatbotQuestions
+            modelBuilder.Entity<ChatbotQuestion>(entity =>
+            {
+                entity.ToTable("chatbot_question");
+                entity.HasKey(t => t.QuestionId);
+                entity.Property(t => t.QuestionId).HasColumnName("question_id").ValueGeneratedOnAdd();
+                entity.Property(t => t.Question).HasColumnName("question");
+                entity.Property(t => t.Answer).HasColumnName("answer");
+                entity.Property(t => t.CreateAt).HasColumnName("create_at");
+                entity.Property(t => t.UpdateAt).HasColumnName("update_at");
+
             });
 
             base.OnModelCreating(modelBuilder);
