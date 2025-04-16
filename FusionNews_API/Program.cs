@@ -1,16 +1,15 @@
+using Application.Entities.Base;
+using Application.Interfaces.IRepositories;
+using Application.Interfaces.IServices;
 using Common.Middleware;
-using FusionNews_API.Data;
 using FusionNews_API.Helpers;
+using FusionNews_API.Services.Jwt;
 using FusionNews_API.WebExtensions;
+using Infrastructure.EntityFramework.DataAccess;
+using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-using Application.Entities.Base;
-using FusionNews_API.Services.Jwt;
-using Application.Interfaces.IRepositories;
-using Infrastructure.EntityFramework.Repositories;
-using Application.Interfaces.IServices;
-using Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,12 +35,6 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
         opts => opts.CommandTimeout(120));
-});
-
-//Builder Service for UserDBContext
-builder.Services.AddDbContext<UserDbContext>(options =>
-{
-    options.UseNpgsql("Host=localhost;Port=5432;Username=sa;Password=123456;Database=FusionNewsDB");
 });
 
 
