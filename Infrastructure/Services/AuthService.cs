@@ -12,19 +12,26 @@ namespace Infrastructure.Services
     public class AuthService : IAuthService
     {
         private readonly IAuthRepository _authRepo;
-        private readonly IPasswordHasher<User> _passwordHasher;
         private readonly JwtService _jwtService;
 
-        public AuthService(IAuthRepository authRepo, IPasswordHasher<User> passwordHasher, JwtService jwtService)
+        public AuthService(IAuthRepository authRepo, JwtService jwtService)
         {
             _authRepo = authRepo;
-            _passwordHasher = passwordHasher;
             _jwtService = jwtService;
         }
 
         public async Task<APIResponse> RegisterAsync(UserRegisterDTO model)
         {
             var response = new APIResponse();
+
+            // Kiểm tra định dạng email trước
+            if (string.IsNullOrWhiteSpace(model.Email) || !model.Email.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.isSuccess = false;
+                response.ErrorMessages.Add("Email must be a valid Gmail address (end with @gmail.com)");
+                return response;
+            }
 
             if (await _authRepo.IsUsernameTakenAsync(model.Username))
             {
@@ -36,12 +43,19 @@ namespace Infrastructure.Services
 
             var user = new User
             {
-                Username = model.Username,
-                Email = model.Email,
-                PasswordHash = _passwordHasher.HashPassword(null, model.Password)
+                UserName = model.Username,
+                Email = model.Email
             };
 
-            await _authRepo.AddUserAsync(user);
+            var result = await _authRepo.AddUserAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.isSuccess = false;
+                response.ErrorMessages = result.Errors.Select(e => e.Description).ToList();
+                return response;
+            }
 
             response.StatusCode = HttpStatusCode.OK;
             response.isSuccess = true;
@@ -49,12 +63,13 @@ namespace Infrastructure.Services
             return response;
         }
 
+
         public async Task<APIResponse> LoginAsync(UserLoginDTO model)
         {
             var response = new APIResponse();
             var user = await _authRepo.GetUserByUsernameAsync(model.Username);
 
-            if (user == null || _passwordHasher.VerifyHashedPassword(null, user.PasswordHash, model.Password) == PasswordVerificationResult.Failed)
+            if (user == null || !await _authRepo.CheckPasswordAsync(user, model.Password))
             {
                 response.StatusCode = HttpStatusCode.Unauthorized;
                 response.isSuccess = false;
@@ -69,7 +84,7 @@ namespace Infrastructure.Services
             response.Result = new
             {
                 token,
-                user = new { user.Id, user.Username, user.Email }
+                user = new { user.Id, user.UserName, user.Email }
             };
             return response;
         }
