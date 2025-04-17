@@ -6,6 +6,6 @@
         public string Question { get; set; }
         public string Answer { get; set; }
         public DateTime CreateAt { get; set; }
-        public DateTime UpdateAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
     }
 }

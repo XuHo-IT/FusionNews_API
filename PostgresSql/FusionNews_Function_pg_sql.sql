@@ -23,8 +23,8 @@ $$ LANGUAGE plpgsql;
 
 
 
-DROP FUNCTION IF EXISTS usf_get_all_questions();
-SELECT * FROM usf_get_all_questions();
+-- DROP FUNCTION IF EXISTS usf_get_all_questions();
+-- SELECT * FROM usf_get_all_questions();
 
 
 
@@ -49,22 +49,132 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-ALTER TABLE chatbot_question  /* for drop col have not nullable*/
-ALTER COLUMN update_at DROP NOT NULL;
+-- ALTER TABLE chatbot_question  /* for drop col have not nullable*/
+-- ALTER COLUMN update_at DROP NOT NULL;
 
 SELECT usf_create_question('{
-  "Question": "What is PostgreSQL?",
-  "Answer": "PostgreSQL is an open-source relational database."
+  "Question": "What is the weather today?",
+  "Answer": "Cloudy day."
 }'::jsonb);
 
-TRUNCATE TABLE chatbot_question RESTART IDENTITY; /* Restart at 1 ( deleted all rows)*/
+-- TRUNCATE TABLE chatbot_question RESTART IDENTITY; /* Restart at 1 ( deleted all rows)*/
 
- /* deleted rows and want the next ID to follow the current highest ID*/
-SELECT setval('chatbot_question_id_seq', COALESCE((SELECT MAX(id) FROM chatbot_question), 1), true);
+--  /* deleted rows and want the next ID to follow the current highest ID*/
+-- SELECT setval('chatbot_question_id_seq', COALESCE((SELECT MAX(id) FROM chatbot_question), 1), true);
 
+-- Update question
+CREATE OR REPLACE FUNCTION usf_update_question(json_input jsonb)
+RETURNS TABLE (
+    questionid INT,
+    question TEXT,
+    answer TEXT,
+    createat TIMESTAMPTZ,
+    updateat TIMESTAMPTZ
+)
+AS $$
+DECLARE
+    u_question_id INT;
+    u_question TEXT;
+    u_answer TEXT;
+BEGIN
+    -- Extract fields from JSON input
+    u_question_id := (json_input->>'QuestionId')::INT;
+    u_question := json_input->>'Question';
+    u_answer := json_input->>'Answer';
+
+    -- Perform the update
+    UPDATE public.chatbot_question cq
+    SET
+        question = COALESCE(u_question, cq.question),
+        answer = COALESCE(u_answer, cq.answer),
+        update_at = NOW()
+    WHERE cq.question_id = u_question_id;
+
+    -- Return the updated row
+    RETURN QUERY
+    SELECT 
+        cq.question_id,
+        cq.question,
+        cq.answer,
+        cq.create_at,
+        cq.update_at
+    FROM public.chatbot_question cq
+    WHERE cq.question_id = u_question_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Delete question
+CREATE OR REPLACE FUNCTION usf_delete_question(json_input jsonb)
+RETURNS void
+AS $$
+DECLARE
+    questionid INT;
+BEGIN
+    -- Extract 'id' from JSON input
+    questionid := (json_input->>'questionid')::INT;
+
+    DELETE FROM public.chatbot_question
+    WHERE question_id = questionid;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Delete question with ID 3
+SELECT usf_delete_question('{"questionid": 3}'::jsonb);
+
+-- Update a question
+SELECT * FROM usf_update_question('{
+    "QuestionId": 1,
+    "Question": "What is PostgreSQL?",
+    "Answer": "PostgreSQL is an open-source relational database and good for using with C#."
+}'::jsonb);
+
+CREATE OR REPLACE FUNCTION usf_get_questions()
+RETURNS TABLE (
+    question_id INT,
+    question TEXT
+)
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        cq.question_id,
+        cq.question
+    FROM public.chatbot_question cq;
+END;
+$$ LANGUAGE plpgsql;
+
+
+DROP FUNCTION usf_get_questions()
+SELECT * FROM usf_get_questions();
+
+
+CREATE OR REPLACE FUNCTION usf_get_answer(json_input jsonb)
+RETURNS TEXT
+AS $$
+DECLARE
+    qid INT;
+    result TEXT;
+BEGIN
+    -- Extract values from JSON input
+    qid := (json_input->>'questionid')::INT;
+
+    -- Look for the question by ID and text
+    SELECT answer INTO result
+    FROM public.chatbot_question
+    WHERE question_id = qid ;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+
+	SELECT usf_get_answer('{
+    "questionid": 1
+}'::jsonb);
 
 ------------------------------------------- User Function -------------------------------------------  
-DROP FUNCTION IF EXISTS usf_get_user_by_username(text)
+-- DROP FUNCTION IF EXISTS usf_get_user_by_username(text)
 
 CREATE OR REPLACE FUNCTION usf_get_user_by_username(p_username TEXT)
 RETURNS TABLE (
@@ -112,49 +222,58 @@ $$ LANGUAGE plpgsql;
 
 
 ------------------------------------------- Post Function -------------------------------------------  
-CREATE OR REPLACE FUNCTION usp_create_post(json_input JSONB)
-RETURNS VOID AS $$
+-- Create post
+CREATE OR REPLACE FUNCTION usf_create_post(json_input JSONB)
+RETURNS VOID AS $$ 
 DECLARE
     title TEXT;
     content TEXT;
 BEGIN
-    -- Trích xuất các giá trị từ JSON
+    -- Extract values from JSON
     title := json_input->>'Title';
     content := json_input->>'Content';
 
-    -- Kiểm tra nếu dữ liệu hợp lệ
+    -- Check if data is valid
     IF title IS NULL OR content IS NULL THEN
         RAISE EXCEPTION 'Invalid input: Title and Content are required';
     END IF;
 
-    -- Chèn vào bảng Post
+    -- Insert into Post table
     INSERT INTO post (title, content, created_on)
     VALUES (title, content, NOW());
 END;
 $$ LANGUAGE plpgsql;
 
--- Update Post
+-- Update post
 CREATE OR REPLACE FUNCTION usf_update_post(json_input jsonb)
-returns void
+RETURNS TABLE (postid int, title text, content text)
 AS $$
 DECLARE
-    post_id int,
-    title varchar(100);
-    content TEXT ;
+    u_post_id int;
+    u_title varchar(100);
+    u_content TEXT;
 BEGIN
     -- Trích xuất các giá trị từ JSON
-    post_id := (json_input->>'PostId')::INT;
-    title := json_input->>'Title';
-    content := json_input->>'Content';
-    UPDATE post
-        SET
-            title = COALESCE(title, title), -- Chỉ cập nhật nếu không NULL
-            content = COALESCE(content, content),
-        WHERE post_id = post_id;
+    u_post_id := (json_input->>'PostId')::INT;
+    u_title := json_input->>'Title';
+    u_content := json_input->>'Content';
+ 
+    -- Cập nhật với alias để tránh mập mờ
+    UPDATE post p
+    SET
+        title = COALESCE(u_title, p.title),
+        content = COALESCE(u_content, p.content)
+    WHERE p.post_id = u_post_id;
+ 
+    -- Trả về bản ghi sau khi cập nhật
+    RETURN QUERY
+    SELECT p.post_id, p.title, p.content
+    FROM post p
+    WHERE p.post_id = u_post_id;
 END;
 $$ LANGUAGE plpgsql;
- 
--- Delete Post
+
+-- Delete post
 CREATE OR REPLACE FUNCTION usf_delete_post(json_input jsonb)
 RETURNS void
 AS $$
@@ -165,6 +284,8 @@ BEGIN
     id := (json_input->>'id')::INT;
  
     DELETE FROM post
-    WHERE post_id
+    WHERE post_id = id;
 END;
 $$ LANGUAGE plpgsql;
+SELECT usf_delete_post('{"id": 3}'::jsonb);
+
