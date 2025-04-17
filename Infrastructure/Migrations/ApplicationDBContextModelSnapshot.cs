@@ -45,7 +45,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("question");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_at");
 
