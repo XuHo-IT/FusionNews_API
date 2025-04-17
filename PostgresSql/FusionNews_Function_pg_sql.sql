@@ -222,31 +222,88 @@ $$ LANGUAGE plpgsql;
 
 
 ------------------------------------------- Post Function -------------------------------------------  
--- Create post
-CREATE OR REPLACE FUNCTION usf_create_post(json_input JSONB)
-RETURNS VOID AS $$ 
+-- Get All Post function --
+CREATE OR REPLACE FUNCTION usf_get_all_post()
+RETURNS TABLE(
+	postid int, 
+	title varchar(100), 
+	content text, 
+	newsofpostid int, 
+	createat TIMESTAMPTZ, -- timestamp with time zone = TIMESTAMPTZ
+    updateat TIMESTAMPTZ 
+	)AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        post.post_id,
+        post.title::VARCHAR,
+        post.content,
+        post.news_of_post_id,
+        post.create_at,
+        post.update_at
+    FROM post;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Find Post by Id
+CREATE OR REPLACE FUNCTION usf_find_post_by_id(json_input jsonb)
+RETURNS TABLE(
+	postid int, 
+	title varchar(100), 
+	content text, 
+	newsofpostid int, 
+	createat TIMESTAMPTZ,
+    updateat TIMESTAMPTZ 
+)AS $$
 DECLARE
-    title TEXT;
-    content TEXT;
+    id INT;
+BEGIN
+    -- Extract the 'id' value from the JSON input
+    id := (json_input->>'id')::INT;
+ 
+    -- Query the 'post' table based on the extracted id
+    RETURN QUERY
+    SELECT 
+        post.post_id,
+        post.title::VARCHAR,
+        post.content, -- Corrected to match TEXT type
+        post.news_of_post_id,
+        post.create_at,
+        post.update_at
+    FROM post
+    WHERE post.post_id = id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create Post function
+CREATE OR REPLACE FUNCTION usf_create_post(json_input jsonb)
+RETURNS void
+AS $$
+DECLARE
+    title varchar(100);
+    content TEXT ;
+	news_of_post_id int;
 BEGIN
     -- Extract values from JSON
     title := json_input->>'Title';
     content := json_input->>'Content';
+	news_of_post_id := json_input->>'NewsOfPostId';
 
-    -- Check if data is valid
-    IF title IS NULL OR content IS NULL THEN
-        RAISE EXCEPTION 'Invalid input: Title and Content are required';
+    -- Kiểm tra nếu dữ liệu hợp lệ
+    IF news_of_post_id IS NULL THEN
+        INSERT INTO post (title, content, create_at)
+        VALUES (title, content, NOW());
+    ELSE
+        INSERT INTO post (title, content, news_of_post_id, create_at)
+        VALUES (title, content, news_of_post_id, NOW());
     END IF;
 
-    -- Insert into Post table
-    INSERT INTO post (title, content, created_on)
-    VALUES (title, content, NOW());
 END;
 $$ LANGUAGE plpgsql;
 
 -- Update post
 CREATE OR REPLACE FUNCTION usf_update_post(json_input jsonb)
-RETURNS TABLE (postid int, title text, content text)
+RETURNS TABLE (postid int, title text, content text, create_at TIMESTAMPTZ, update_at TIMESTAMPTZ)
 AS $$
 DECLARE
     u_post_id int;
@@ -257,23 +314,18 @@ BEGIN
     u_post_id := (json_input->>'PostId')::INT;
     u_title := json_input->>'Title';
     u_content := json_input->>'Content';
- 
+
     -- Cập nhật với alias để tránh mập mờ
     UPDATE post p
-    SET
-        title = COALESCE(u_title, p.title),
-        content = COALESCE(u_content, p.content)
-    WHERE p.post_id = u_post_id;
- 
-    -- Trả về bản ghi sau khi cập nhật
-    RETURN QUERY
-    SELECT p.post_id, p.title, p.content
-    FROM post p
+    SET 
+        title = COALESCE(u_title, p.title), 
+        content = COALESCE(u_content, p.content),
+        update_at = NOW()
     WHERE p.post_id = u_post_id;
 END;
 $$ LANGUAGE plpgsql;
 
--- Delete post
+-- Delete Post
 CREATE OR REPLACE FUNCTION usf_delete_post(json_input jsonb)
 RETURNS void
 AS $$
@@ -287,5 +339,3 @@ BEGIN
     WHERE post_id = id;
 END;
 $$ LANGUAGE plpgsql;
-SELECT usf_delete_post('{"id": 3}'::jsonb);
-
