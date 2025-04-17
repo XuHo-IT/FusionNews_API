@@ -2,7 +2,7 @@
 using Application.Interfaces.IRepositories;
 using Dapper;
 using Infrastructure.EntityFramework.Const;
-using Infrastructure.EntityFramework.DataAccess;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Data;
 
@@ -11,6 +11,7 @@ namespace Infrastructure.EntityFramework.Repositories
 {
     public class PostRepository : DapperBase, IPostRepository
     {
+        public PostRepository(IConfiguration configuration) : base(configuration) { }
         public async Task<List<Post>> GetPostsAsync()
         {
             return await WithConnection(async connection =>
@@ -90,25 +91,23 @@ namespace Infrastructure.EntityFramework.Repositories
             });
         }
 
-        public async Task<Post> DeletePostAsync(int id)
+        public async Task DeletePostAsync(int id)
         {
-            return await WithConnection(async connection =>
+            await WithConnection(async connection =>
             {
                 var parameters = new DynamicParameters();
                 var jInput = JsonConvert.SerializeObject(new { id });
                 parameters.Add("@JInput", jInput, DbType.String);
-                var result = await connection.QueryFirstOrDefaultAsync<Post>(
+                var result = await connection.ExecuteAsync(
                     StoredExecFunction.DeletePost,
                     param: parameters,
                     commandType: CommandType.Text
                 );
 
-                if (result == null)
+                if (result == 0)
                 {
                     throw new Exception("Delete post failed.");
                 }
-
-                return result;
             });
         }
     }

@@ -10,7 +10,8 @@ namespace Application.Entities.Base
     {
         public int CommentId { get; set; }
         public string Content { get; set; } = string.Empty;
-        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+        public DateTime CreateAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
         public int PostId { get; set; }
         public Post? Post { get; set; }
     }

@@ -36,7 +36,8 @@ namespace Infrastructure.EntityFramework.DataAccess
                 entity.Property(p => p.Title).HasColumnName("title");
                 entity.Property(p => p.Content).HasColumnName("content");
                 entity.Property(p => p.NewsOfPostId).HasColumnName("news_of_post_id").IsRequired(false);
-                entity.Property(p => p.CreatedOn).HasColumnName("created_on");
+                entity.Property(p => p.CreateAt).HasColumnName("create_at");
+                entity.Property(p => p.UpdateAt).HasColumnName("update_at");
 
                 entity.HasOne(p => p.NewsOfPost)
                     .WithMany(n => n.Posts) // Relation 1-n
@@ -82,7 +83,8 @@ namespace Infrastructure.EntityFramework.DataAccess
                 entity.HasKey(c => c.CommentId);
                 entity.Property(c => c.CommentId).HasColumnName("comment_id").ValueGeneratedOnAdd();
                 entity.Property(c => c.Content).HasColumnName("content");
-                entity.Property(c => c.CreatedOn).HasColumnName("created_on");
+                entity.Property(c => c.CreateAt).HasColumnName("create_at");
+                entity.Property(c => c.UpdateAt).HasColumnName("update_at");
                 entity.Property(c => c.PostId).HasColumnName("post_id");
                 entity.HasOne(c => c.Post)
                       .WithMany(p => p.Comments)

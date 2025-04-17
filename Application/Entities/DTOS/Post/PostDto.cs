@@ -9,9 +9,8 @@ namespace FusionNews_API.DTOs.Post
 
         public string Content { get; set; } = string.Empty;
         public int? NewsOfPostId { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreateAt { get; set; }
         public ICollection<PostTag>? PostTags { get; set; }
-        public List<CommentOfPost>? Comments { get; set; }
         public NewsOfPost? NewsOfPost { get; set; }
     }
 }
