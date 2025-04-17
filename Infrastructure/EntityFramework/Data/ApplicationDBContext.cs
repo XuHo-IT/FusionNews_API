@@ -1,11 +1,14 @@
 ﻿using Application.Entities.Base;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EntityFramework.DataAccess
 {
-    public class ApplicationDBContext(DbContextOptions options) : DbContext(options)
+    public class ApplicationDBContext : IdentityDbContext<User>
     {
-
+        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
+            : base(options)
+        { }
         public DbSet<User> Users { get; set; } //New DB set
 
         public DbSet<Tag> Tags { get; set; }
@@ -109,13 +112,13 @@ namespace Infrastructure.EntityFramework.DataAccess
             //User
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("users"); // tên bảng viết thường
+                entity.ToTable("users");
 
                 entity.HasKey(u => u.Id);
                 entity.Property(u => u.Id).HasColumnName("id");
-                entity.Property(u => u.Username).HasColumnName("username");
+                entity.Property(u => u.UserName).HasColumnName("username"); // lưu ý là `UserName` chứ không phải `Username`
                 entity.Property(u => u.Email).HasColumnName("email");
-                entity.Property(u => u.PasswordHash).HasColumnName("password_hash"); // 👈 QUAN TRỌNG
+                entity.Property(u => u.PasswordHash).HasColumnName("password_hash");
             });
 
             base.OnModelCreating(modelBuilder);

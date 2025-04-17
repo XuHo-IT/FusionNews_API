@@ -23,7 +23,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddService();
 builder.Services.AddRepository();
@@ -37,6 +36,12 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     // Run this command in the terminal to generator migration
     // --> dotnet ef migrations add AddDB  -p ../Infrastructure -s ../FusionNews_Api 
 });
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDBContext>()
+    .AddDefaultTokenProviders();
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
