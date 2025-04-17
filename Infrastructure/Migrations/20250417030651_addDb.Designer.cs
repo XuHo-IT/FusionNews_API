@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250416094728_addDB")]
-    partial class addDB
+    [Migration("20250417030651_addDb")]
+    partial class addDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,7 +48,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("question");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("update_at");
 

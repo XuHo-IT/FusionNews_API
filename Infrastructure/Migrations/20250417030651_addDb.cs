@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addDB : Migration
+    public partial class addDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,7 @@ namespace Infrastructure.Migrations
                     question = table.Column<string>(type: "text", nullable: false),
                     answer = table.Column<string>(type: "text", nullable: false),
                     create_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    update_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    update_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
