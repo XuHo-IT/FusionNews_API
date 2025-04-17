@@ -1,7 +1,8 @@
 ﻿using Application.Entities.Base;
 using Application.Interfaces.IRepositories;
 using Dapper;
-using Infrastructure.EntityFramework.DataAccess;
+using Infrastructure.EntityFramework.Const;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Data;
 
@@ -9,6 +10,7 @@ namespace Infrastructure.EntityFramework.Repositories
 {
     public class AuthRepository : DapperBase, IAuthRepository
     {
+        public AuthRepository(IConfiguration configuration) : base(configuration) { }
         public async Task AddUserAsync(User user)
         {
             await WithConnection(async connection =>
@@ -18,7 +20,7 @@ namespace Infrastructure.EntityFramework.Repositories
                 parameters.Add("@JInput", jInput, DbType.String);
 
                 await connection.ExecuteAsync(
-                    "SELECT usf_add_user(@JInput::jsonb)",
+                     StoredExecFunction.AddUser,
                     param: parameters,
                     commandType: CommandType.Text
                 );
@@ -30,8 +32,7 @@ namespace Infrastructure.EntityFramework.Repositories
         {
             return await WithConnection(async connection =>
             {
-                var query = "SELECT * FROM usf_get_user_by_username(@Username)";
-                return await connection.QueryFirstOrDefaultAsync<User>(query, new { Username = username });
+                return await connection.QueryFirstOrDefaultAsync<User>(StoredExecFunction.GetUserByUsername, new { Username = username });
             });
         }
 
@@ -39,9 +40,7 @@ namespace Infrastructure.EntityFramework.Repositories
         {
             return await WithConnection(async connection =>
             {
-
-                var query = "SELECT usf_is_username_taken(@Username)";
-                var result = await connection.ExecuteScalarAsync<int>(query, new { Username = username });
+                var result = await connection.ExecuteScalarAsync<int>(StoredExecFunction.IsUsernameTaken, new { Username = username });
                 return result > 0;
             });
         }

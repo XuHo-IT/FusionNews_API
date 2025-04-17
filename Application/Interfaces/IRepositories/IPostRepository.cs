@@ -9,7 +9,10 @@ namespace Application.Interfaces.IRepositories
 {
     public interface IPostRepository
     {
-        Task<List<Post>> GetAllPosts();
-        Task<Post> CreatePost(Post postModel);
+        Task<List<Post>> GetPostsAsync();
+        Task<Post> CreatePostAsync(Post postModel);
+        Task<Post> GetPostByIdAsync(int id);
+        Task<Post> UpdatePostAsync(Post postModel);
+        Task DeletePostAsync(int id);
     }
 }
