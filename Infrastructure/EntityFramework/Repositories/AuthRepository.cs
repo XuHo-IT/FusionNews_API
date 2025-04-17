@@ -1,51 +1,39 @@
 ﻿using Application.Entities.Base;
 using Application.Interfaces.IRepositories;
-using Dapper;
-using Infrastructure.EntityFramework.Const;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using System.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.EntityFramework.Repositories
 {
-    public class AuthRepository : DapperBase, IAuthRepository
+    public class AuthRepository : IAuthRepository
     {
-        public AuthRepository(IConfiguration configuration) : base(configuration) { }
-        public async Task AddUserAsync(User user)
-        {
-            await WithConnection(async connection =>
-            {
-                var parameters = new DynamicParameters();
-                var jInput = JsonConvert.SerializeObject(user);
-                parameters.Add("@JInput", jInput, DbType.String);
+        private readonly UserManager<User> _userManager;
 
-                await connection.ExecuteAsync(
-                     StoredExecFunction.AddUser,
-                    param: parameters,
-                    commandType: CommandType.Text
-                );
-                return 0;
-            });
+        public AuthRepository(UserManager<User> userManager)
+        {
+            _userManager = userManager;
+        }
+
+        public async Task<IdentityResult> AddUserAsync(User user, string rawPassword)
+        {
+            // Không gán password vào PasswordHash nữa!
+            return await _userManager.CreateAsync(user, rawPassword);
         }
 
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
-            return await WithConnection(async connection =>
-            {
-                return await connection.QueryFirstOrDefaultAsync<User>(StoredExecFunction.GetUserByUsername, new { Username = username });
-            });
+            return await _userManager.FindByNameAsync(username);
         }
 
         public async Task<bool> IsUsernameTakenAsync(string username)
         {
-            return await WithConnection(async connection =>
-            {
-                var result = await connection.ExecuteScalarAsync<int>(StoredExecFunction.IsUsernameTaken, new { Username = username });
-                return result > 0;
-            });
+            var user = await _userManager.FindByNameAsync(username);
+            return user != null;
+        }
+
+        public async Task<bool> CheckPasswordAsync(User user, string password)
+        {
+            return await _userManager.CheckPasswordAsync(user, password);
         }
     }
+
 }
-
-
-

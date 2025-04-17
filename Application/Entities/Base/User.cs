@@ -1,10 +1,9 @@
-﻿namespace Application.Entities.Base
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Application.Entities.Base
 {
-    public class User
+    public class User: IdentityUser
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string PasswordHash { get; set; }
-        public string Email { get; set; }
+
     }
 }
