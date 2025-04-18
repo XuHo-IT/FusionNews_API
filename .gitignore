@@ -23,3 +23,6 @@
 *.sw?
 
 *.tsbuildinfo
+
+// Migrations
+Infrastructure/Migrations
