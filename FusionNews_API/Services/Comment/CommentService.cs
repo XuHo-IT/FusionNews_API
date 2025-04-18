@@ -2,28 +2,29 @@
 using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServices;
 using Application.Reponse;
+using Infrastructure.EntityFramework.Repositories;
 using System.Net;
 
-namespace FusionNews_API.Services.Posts
+namespace FusionNews_API.Services.Comments
 {
-    public class PostService : IPostService
+    public class CommentService : ICommentService
     {
-        private readonly IPostRepository _postRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public PostService(IPostRepository postRepository)
+        public CommentService(ICommentRepository commentRepository)
         {
-            _postRepository = postRepository;
+            _commentRepository = commentRepository;
         }
 
-        public async Task<APIResponse> CreatePostAsync(Post postModel)
+        public async Task<APIResponse> CreateCommentAsync(Comment CommentModel)
         {
             var response = new APIResponse();
 
             try
             {
-                var articles = await _postRepository.CreatePostAsync(postModel);
+                var comment = await _commentRepository.CreateCommentAsync(CommentModel);
 
-                response.Result = articles;
+                response.Result = comment;
                 response.StatusCode = HttpStatusCode.OK;
                 response.isSuccess = true;
             }
@@ -37,22 +38,44 @@ namespace FusionNews_API.Services.Posts
             return response;
         }
 
-        public async Task<APIResponse> GetPostByIdAsync(int id)
+        public async Task<APIResponse> DeleteCommentAsync(int id)
         {
             var response = new APIResponse();
 
             try
             {
-                var post = await _postRepository.GetPostByIdAsync(id);
-                if (post is null)
+                await _commentRepository.DeleteCommentAsync(id);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.isSuccess = false;
+                response.ErrorMessages.Add(ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<APIResponse> GetCommentByIdAsync(int id)
+        {
+            var response = new APIResponse();
+
+            try
+            {
+                var comment = await _commentRepository.GetCommentByIdAsync(id);
+
+                if (comment is null)
                 {
                     response.StatusCode = HttpStatusCode.NotFound;
                     response.isSuccess = false;
-                    response.ErrorMessages.Add("Post not found");
+                    response.ErrorMessages.Add("Comment not found");
                 }
                 else
                 {
-                    response.Result = post;
+                    response.Result = comment;
                     response.StatusCode = HttpStatusCode.OK;
                     response.isSuccess = true;
                 }
@@ -67,15 +90,15 @@ namespace FusionNews_API.Services.Posts
             return response;
         }
 
-        public async Task<APIResponse> GetPostsAsync()
+        public async Task<APIResponse> GetCommentsAsync(int PostId)
         {
             var response = new APIResponse();
 
             try
             {
-                var posts = await _postRepository.GetPostsAsync();
+                var comment = await _commentRepository.GetCommentsAsync(PostId);
 
-                response.Result = posts;
+                response.Result = comment;
                 response.StatusCode = HttpStatusCode.OK;
                 response.isSuccess = true;
             }
@@ -89,37 +112,15 @@ namespace FusionNews_API.Services.Posts
             return response;
         }
 
-        public async Task<APIResponse> UpdatePostAsync(Post postModel)
+        public async Task<APIResponse> UpdateCommentAsync(Comment CommentModel)
         {
             var response = new APIResponse();
 
             try
             {
-                var articles = await _postRepository.UpdatePostAsync(postModel);
+                var comment = await _commentRepository.UpdateCommentAsync(CommentModel);
 
-                response.Result = articles;
-                response.StatusCode = HttpStatusCode.OK;
-                response.isSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.isSuccess = false;
-                response.ErrorMessages.Add(ex.Message);
-            }
-
-            return response;
-        }
-
-        public async Task<APIResponse> DeletePostAsync(int id)
-        {
-            var response = new APIResponse();
-
-            try
-            {
-                await _postRepository.DeletePostAsync(id);
- 
-                //response.Result = null;
+                response.Result = comment;
                 response.StatusCode = HttpStatusCode.OK;
                 response.isSuccess = true;
             }

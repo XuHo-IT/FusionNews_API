@@ -15,19 +15,23 @@ namespace Infrastructure.EntityFramework.DataAccess
         public DbSet<Post> Post { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
         public DbSet<NewsOfPost> NewsOfPosts { get; set; }
-        public DbSet<CommentOfPost> Comments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<ChatbotQuestion> ChatbotQuestions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // Tag
             modelBuilder.Entity<Tag>(entity =>
             {
                 entity.ToTable("tag");
                 entity.HasKey(t => t.TagId);
                 entity.Property(t => t.TagId).HasColumnName("tag_id").ValueGeneratedOnAdd();
-                entity.Property(t => t.TagName).HasColumnName("name");
+                entity.Property(t => t.TagName).HasColumnName("name")
+                //.IsRequired().HasMaxLength(100)
+                ;
             });
 
             // Post
@@ -79,10 +83,10 @@ namespace Infrastructure.EntityFramework.DataAccess
                 entity.Property(n => n.Country).HasColumnName("country");
             });
 
-            // CommentOfPost
-            modelBuilder.Entity<CommentOfPost>(entity =>
+            // Comment
+            modelBuilder.Entity<Comment>(entity =>
             {
-                entity.ToTable("comment_of_post");
+                entity.ToTable("comment");
                 entity.HasKey(c => c.CommentId);
                 entity.Property(c => c.CommentId).HasColumnName("comment_id").ValueGeneratedOnAdd();
                 entity.Property(c => c.Content).HasColumnName("content");
@@ -107,8 +111,6 @@ namespace Infrastructure.EntityFramework.DataAccess
 
             });
 
-            base.OnModelCreating(modelBuilder);
-
             //User
             modelBuilder.Entity<User>(entity =>
             {
@@ -120,8 +122,6 @@ namespace Infrastructure.EntityFramework.DataAccess
                 entity.Property(u => u.Email).HasColumnName("email");
                 entity.Property(u => u.PasswordHash).HasColumnName("password_hash");
             });
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -52,10 +52,10 @@ $$ LANGUAGE plpgsql;
 -- ALTER TABLE chatbot_question  /* for drop col have not nullable*/
 -- ALTER COLUMN update_at DROP NOT NULL;
 
-SELECT usf_create_question('{
-  "Question": "What is the weather today?",
-  "Answer": "Cloudy day."
-}'::jsonb);
+-- SELECT usf_create_question('{
+--   "Question": "What is the weather today?",
+--   "Answer": "Cloudy day."
+-- }'::jsonb);
 
 -- TRUNCATE TABLE chatbot_question RESTART IDENTITY; /* Restart at 1 ( deleted all rows)*/
 
@@ -339,3 +339,118 @@ BEGIN
     WHERE post_id = id;
 END;
 $$ LANGUAGE plpgsql;
+------------------------------------------- Comments Function -------------------------------------------  
+-- Get All Comment function --
+CREATE OR REPLACE FUNCTION usf_get_all_comments(json_input jsonb)
+RETURNS TABLE(
+	commentid int, 
+	content text, 
+	createat TIMESTAMPTZ, -- timestamp with time zone = TIMESTAMPTZ
+    updateat TIMESTAMPTZ,
+    postid int
+	)AS $$
+DECLARE
+    g_post_id int;
+BEGIN
+    -- Extract the 'id' value from the JSON input
+    g_post_id := (json_input->>'postId')::INT;
+
+    RETURN QUERY
+    SELECT 
+        c.comment_id,
+        c.content,
+        c.create_at,
+        c.update_at,
+        c.post_id
+    FROM comment c;
+    WHERE c.post_id = g_post_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Find Comment by Id
+CREATE OR REPLACE FUNCTION usf_find_comment_by_id(json_input jsonb)
+RETURNS TABLE(
+    commentid int, 
+    content text, 
+    createat TIMESTAMPTZ,
+    updateat TIMESTAMPTZ,
+    postid int
+    ) AS $$
+DECLARE
+    f_id int;
+BEGIN
+    -- Extract the 'id' value from the JSON input
+    f_id := (json_input->>'id')::INT;
+    RETURN QUERY
+    SELECT 
+        c.comment_id,
+        c.content,
+        c.create_at,
+        c.update_at,
+        c.post_id
+    FROM comment c
+    WHERE c.comment_id = f_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create Comment function
+CREATE OR REPLACE FUNCTION usf_create_comment(json_input jsonb)
+RETURNS void
+AS $$
+DECLARE
+    c_content TEXT;
+    c_post_id int;
+BEGIN
+    -- Extract values from JSON
+    c_content := json_input->>'Content';
+    c_post_id := json_input->>'PostId';
+
+    -- Insert into table
+    INSERT INTO comment (content, post_id, create_at)
+    VALUES (c_content, c_post_id, NOW());
+END;
+$$ LANGUAGE plpgsql;
+
+-- Update Comment
+CREATE OR REPLACE FUNCTION usf_update_comment(json_input jsonb)
+RETURNS TABLE (commentid int, content text, createat TIMESTAMPTZ, updateat TIMESTAMPTZ, postid int)
+AS $$
+DECLARE
+    u_comment_id int;
+    u_content TEXT;
+BEGIN
+    -- Extract values from JSON
+    u_comment_id := (json_input->>'CommentId')::INT;
+    u_content := json_input->>'Content';
+    -- Update with alias to avoid ambiguity
+    UPDATE comment c
+    SET 
+        content = COALESCE(u_content, c.content),
+        update_at = NOW()
+    WHERE c.comment_id = u_comment_id;
+    -- Return the updated row
+    RETURN QUERY
+    SELECT 
+        c.comment_id,
+        c.content,
+        c.create_at,
+        c.update_at,
+        c.post_id
+    FROM comment c
+    WHERE c.comment_id = u_comment_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Delete Comment
+CREATE OR REPLACE FUNCTION usf_delete_comment(json_input jsonb)
+RETURNS void
+AS $$
+DECLARE
+    id INT;
+BEGIN
+    -- Extract the 'id' value from the JSON input
+    id := (json_input->>'id')::INT;
+ 
+    DELETE FROM comment
+    WHERE comment_id = id;
+END;

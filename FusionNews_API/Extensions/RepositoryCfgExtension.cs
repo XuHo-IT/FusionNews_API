@@ -11,6 +11,7 @@ namespace FusionNews_API.WebExtensions
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<IChatBotRepository, ChatBotRepository>();
 
             return services;
