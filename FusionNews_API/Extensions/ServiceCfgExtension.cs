@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.IServices;
 using Application.Interfaces.Services;
+using FusionNews_API.Services.Comments;
 using FusionNews_API.Services.News;
 using FusionNews_API.Services.Posts;
 using FusionNews_API.Services.Quetions;
@@ -17,6 +18,7 @@ namespace FusionNews_API.WebExtensions
             services.AddSingleton<Log>();
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IChatBotService, ChatBotService>();
 
 

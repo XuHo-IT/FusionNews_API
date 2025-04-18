@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Entities.Base
 {
-    public class CommentOfPost
+    public class Comment
     {
         public int CommentId { get; set; }
         public string Content { get; set; } = string.Empty;
