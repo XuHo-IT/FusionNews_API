@@ -18,20 +18,31 @@ namespace Infrastructure.EntityFramework.Repositories
             _endpoint = configuration["News:APIEndPoint"];
         }
 
-        public async Task<List<NewsArticle>> FetchNewsAsync()
+        public async Task<List<NewsArticle>> FetchNewsAsync(string searchQuery)
         {
-            var url = $"{_endpoint}{_apiKey}";
+            // Calculate the date before today
+            var yesterday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+
+            // Construct the API URL with the dynamic date and search query
+            var url = $"{_endpoint}?q={searchQuery}&from={yesterday}&sortBy=publishedAt&apiKey={_apiKey}";
+
+            // Make the API request
             var response = await _httpClient.GetAsync(url);
 
             var json = await response.Content.ReadAsStringAsync();
 
+            // Check if the request was successful
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception("News API Error: " + json);
             }
 
+            // Deserialize the JSON response to a NewsApiResponse object
             var newsResponse = JsonConvert.DeserializeObject<NewsApiResponse>(json);
-            return newsResponse.Results ?? new List<NewsArticle>();
+
+            // Return the list of news articles or an empty list if null
+            return newsResponse?.Articles ?? new List<NewsArticle>();  // Changed from Results to Articles
         }
+
     }
 }

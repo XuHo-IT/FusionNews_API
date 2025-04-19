@@ -4,6 +4,6 @@ namespace Application.Interfaces.IRepositories
 {
     public interface INewsRepository
     {
-        Task<List<NewsArticle>> FetchNewsAsync();
+        Task<List<NewsArticle>> FetchNewsAsync(string searchQuery);
     }
 }
