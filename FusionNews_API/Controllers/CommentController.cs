@@ -1,16 +1,12 @@
 ﻿using Application.Entities.Base;
 using Application.Entities.DTOS.CommentOfPost;
-using Application.Entities.DTOS.Post;
 using Application.Interfaces.IServices;
 using Application.Interfaces.Services;
 using Application.Reponse;
 using AutoMapper;
-using FusionNews_API.DTOs.Post;
-using FusionNews_API.Services.Posts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace FusionNews_API.Controllers
 {
@@ -33,8 +29,8 @@ namespace FusionNews_API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("get-all-comment")]
-        public async Task<IActionResult> GetAllComments(int PostId)
+        [HttpGet("get-all-comment/{postId:int}")]
+        public async Task<IActionResult> GetAllComments([FromRoute] int PostId)
         {
             try
             {
@@ -76,12 +72,36 @@ namespace FusionNews_API.Controllers
                 return StatusCode(500, _response);
             }
         }
-        [HttpPost]
-        public async Task<ActionResult> CreateComment([FromBody] CreateComment commentCreateDto)
+        [HttpPost("create-comment/{postId:int}")]
+        public async Task<ActionResult> CreateComment([FromRoute] int postId, CreateCommentDto commentCreateDto)
         {
             try
             {
+                var post = await _postService.GetPostByIdAsync(postId);
+
+                if (post == null)
+                {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.isSuccess = false;
+                    _response.ErrorMessages.Add("Post not found");
+                    return NotFound(_response);
+                }
+
+                //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // get User.Id
+                ////var userName = User.Identity?.Name; // or FindFirstValue(ClaimTypes.Name)
+
+                //if (string.IsNullOrEmpty(userId))
+                //{
+                //    _response.StatusCode = HttpStatusCode.BadRequest;
+                //    _response.isSuccess = false;
+                //    _response.ErrorMessages.Add("User not found");
+                //    return BadRequest(_response);
+                //}
+
                 Comment commentModel = _mapper.Map<Comment>(commentCreateDto);
+                //commentModel.UserId = userId;
+                commentModel.UserId = "545400cb-fbef-4dd5-a306-7953935d1885"; // test
+
                 var response = await _commentService.CreateCommentAsync(commentModel);
                 _log.LogiInfo($"Comment created successfully at {DateTime.Now}.");
 
@@ -150,12 +170,12 @@ namespace FusionNews_API.Controllers
             }
         }
 
-        [HttpPut("update-comment")]
-        public async Task<IActionResult> UpdateComment([FromBody] UpdateComment updateCommentDto)
+        [HttpPut("update-comment/{commentId:int}")]
+        public async Task<IActionResult> UpdateComment([FromRoute] int commentId, [FromBody] UpdateCommentDto updateCommentDto)
         {
             try
             {
-                var result = await _commentService.GetCommentByIdAsync(updateCommentDto.CommentId);
+                var result = await _commentService.GetCommentByIdAsync(commentId);
                 if (result == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -165,6 +185,8 @@ namespace FusionNews_API.Controllers
                 }
 
                 Comment commentModel = _mapper.Map<Comment>(updateCommentDto);
+                commentModel.CommentId = commentId; // Ensure the ID is set for the update
+
                 var respone = await _commentService.UpdateCommentAsync(commentModel);
 
                 _response.StatusCode = HttpStatusCode.OK;
