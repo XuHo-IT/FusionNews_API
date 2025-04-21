@@ -1,5 +1,4 @@
-﻿using Application.Entities.Base;
-using Application.Interfaces.IRepositories;
+﻿using Application.Interfaces.IRepositories;
 using Application.Interfaces.Services;
 using Application.Reponse;
 using Common.Constants;
@@ -23,7 +22,7 @@ namespace FusionNews_API.Services.News
 
             try
             {
-                var articles = await _newsRepository.FetchNewsAsync();
+                var articles = await _newsRepository.FetchNewsAsync(filterOn);
 
                 articles = Util.Filtering(articles, filterOn, filterRequest);
 
@@ -33,7 +32,7 @@ namespace FusionNews_API.Services.News
                 response.totalPages = (int)Math.Ceiling((double)response.totalRecords / pageSize);
 
                 articles = Util.Pagination(pageNumber, pageSize, articles);
-                
+
 
                 response.Result = articles;
                 response.StatusCode = HttpStatusCode.OK;
