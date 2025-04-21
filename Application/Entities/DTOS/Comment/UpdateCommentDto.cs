@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Application.Entities.DTOS.CommentOfPost
 {
-    public class CreateComment
+    public class UpdateCommentDto
     {
         [Required]
+        [MinLength(5, ErrorMessage = "Title must be 5 characters")]
+        [MaxLength(300, ErrorMessage = "Title cannot be over 300 characters")]
         public string Content { get; set; } = string.Empty;
-        [Required]
-        public int PostId { get; set; }
     }
 }

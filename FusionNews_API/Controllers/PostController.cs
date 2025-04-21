@@ -5,8 +5,10 @@ using Application.Interfaces.Services;
 using Application.Reponse;
 using AutoMapper;
 using FusionNews_API.DTOs.Post;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace FusionNews_API.Controllers
 {
@@ -60,12 +62,27 @@ namespace FusionNews_API.Controllers
                 return StatusCode(500, _response);
             }
         }
-        [HttpPost]
+
+        //[Authorize]
+        [HttpPost("create-post")]
         public async Task<ActionResult> CreatePost([FromBody] CreatePostDto postCreateDto)
         {
             try
             {
+                //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+
+                //if (string.IsNullOrEmpty(userId))
+                //{
+                //    _response.StatusCode = HttpStatusCode.BadRequest;
+                //    _response.isSuccess = false;
+                //    _response.ErrorMessages.Add("User not found");
+                //    return BadRequest(_response);
+                //}
+
                 Post postmodel = _mapper.Map<Post>(postCreateDto);
+                //postmodel.UserId = userId; 
+                postmodel.UserId = "545400cb-fbef-4dd5-a306-7953935d1885"; // test
+
                 var response = await _postService.CreatePostAsync(postmodel);
                 _log.LogiInfo($"Post created successfully at {DateTime.Now}.");
 

@@ -9,7 +9,7 @@ namespace Infrastructure.EntityFramework.DataAccess
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
             : base(options)
         { }
-        public DbSet<User> Users { get; set; } //New DB set
+        //public DbSet<User> Users { get; set; } //New DB set
 
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Post> Post { get; set; }
@@ -38,18 +38,24 @@ namespace Infrastructure.EntityFramework.DataAccess
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.ToTable("post");
+                //entity.HasKey(p => new { p.PostId, p.UserId});
                 entity.HasKey(p => p.PostId);
                 entity.Property(p => p.PostId).HasColumnName("post_id").ValueGeneratedOnAdd();
                 entity.Property(p => p.Title).HasColumnName("title");
                 entity.Property(p => p.Content).HasColumnName("content");
-                entity.Property(p => p.NewsOfPostId).HasColumnName("news_of_post_id").IsRequired(false);
+                entity.Property(p => p.NewsOfPostId).HasColumnName("news_of_post_id");
                 entity.Property(p => p.CreateAt).HasColumnName("create_at");
                 entity.Property(p => p.UpdateAt).HasColumnName("update_at");
+                entity.Property(p => p.UserId).HasColumnName("user_id");
 
                 entity.HasOne(p => p.NewsOfPost)
                     .WithMany(n => n.Posts) // Relation 1-n
                     .HasForeignKey(p => p.NewsOfPostId)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(p => p.User).WithOne()
+                    .HasForeignKey<Post>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade); // Delete all posts of user when user is deleted
             });
 
             // PostTag
@@ -63,11 +69,13 @@ namespace Infrastructure.EntityFramework.DataAccess
                 // => Relation n-n
                 entity.HasOne(pt => pt.Post)
                     .WithMany(p => p.PostTags)
-                    .HasForeignKey(pt => pt.PostId);
+                    .HasForeignKey(pt => pt.PostId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(pt => pt.Tag)
                     .WithMany(t => t.PostTags)
-                    .HasForeignKey(pt => pt.TagId);
+                    .HasForeignKey(pt => pt.TagId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // NewsOfPost
@@ -93,9 +101,16 @@ namespace Infrastructure.EntityFramework.DataAccess
                 entity.Property(c => c.CreateAt).HasColumnName("create_at");
                 entity.Property(c => c.UpdateAt).HasColumnName("update_at");
                 entity.Property(c => c.PostId).HasColumnName("post_id");
+                entity.Property(c => c.UserId).HasColumnName("user_id");
+
                 entity.HasOne(c => c.Post)
                       .WithMany(p => p.Comments)
                       .HasForeignKey(c => c.PostId);
+
+                entity.HasOne(c => c.User)
+                        .WithMany()
+                        .HasForeignKey(c => c.UserId)
+                        .OnDelete(DeleteBehavior.Cascade); 
             });
 
             //ChatbotQuestions

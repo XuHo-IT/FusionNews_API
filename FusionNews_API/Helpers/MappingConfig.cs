@@ -1,5 +1,6 @@
 ﻿using Application.Entities.Base;
 using Application.Entities.DTOS.ChatBotQuestion;
+using Application.Entities.DTOS.Comment;
 using Application.Entities.DTOS.CommentOfPost;
 using Application.Entities.DTOS.Post;
 using Application.Entities.DTOS.User;
@@ -15,8 +16,10 @@ namespace FusionNews_API.Helpers
         {
             CreateMap<Post, CreatePostDto>().ReverseMap();
             CreateMap<Post, UpdatePostDto>().ReverseMap();
-            CreateMap<Comment, CreateComment>().ReverseMap();
-            CreateMap<Comment, UpdateComment>().ReverseMap();
+            CreateMap<Post, PostDto>().ReverseMap();
+            CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Comment, CreateCommentDto>().ReverseMap();
+            CreateMap<Comment, UpdateCommentDto>().ReverseMap();
             CreateMap<ChatbotQuestion, ChatbotQuestionCreateDTO>().ReverseMap();
             CreateMap<ChatbotQuestion, ChatbotQuestionUpdateDTO>().ReverseMap();
             CreateMap<ChatbotQuestion, ChatbotQuestionRequest>().ReverseMap();
