@@ -1,11 +1,14 @@
 ﻿using Application.Entities.Base;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EntityFramework.DataAccess
 {
-    public class ApplicationDBContext(DbContextOptions options) : DbContext(options)
+    public class ApplicationDBContext : IdentityDbContext<User>
     {
-
+        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
+            : base(options)
+        { }
         public DbSet<User> Users { get; set; } //New DB set
 
         public DbSet<Tag> Tags { get; set; }
@@ -36,7 +39,8 @@ namespace Infrastructure.EntityFramework.DataAccess
                 entity.Property(p => p.Title).HasColumnName("title");
                 entity.Property(p => p.Content).HasColumnName("content");
                 entity.Property(p => p.NewsOfPostId).HasColumnName("news_of_post_id").IsRequired(false);
-                entity.Property(p => p.CreatedOn).HasColumnName("created_on");
+                entity.Property(p => p.CreateAt).HasColumnName("create_at");
+                entity.Property(p => p.UpdateAt).HasColumnName("update_at");
 
                 entity.HasOne(p => p.NewsOfPost)
                     .WithMany(n => n.Posts) // Relation 1-n
@@ -82,7 +86,8 @@ namespace Infrastructure.EntityFramework.DataAccess
                 entity.HasKey(c => c.CommentId);
                 entity.Property(c => c.CommentId).HasColumnName("comment_id").ValueGeneratedOnAdd();
                 entity.Property(c => c.Content).HasColumnName("content");
-                entity.Property(c => c.CreatedOn).HasColumnName("created_on");
+                entity.Property(c => c.CreateAt).HasColumnName("create_at");
+                entity.Property(c => c.UpdateAt).HasColumnName("update_at");
                 entity.Property(c => c.PostId).HasColumnName("post_id");
                 entity.HasOne(c => c.Post)
                       .WithMany(p => p.Comments)
@@ -107,13 +112,13 @@ namespace Infrastructure.EntityFramework.DataAccess
             //User
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("users"); // tên bảng viết thường
+                entity.ToTable("users");
 
                 entity.HasKey(u => u.Id);
                 entity.Property(u => u.Id).HasColumnName("id");
-                entity.Property(u => u.Username).HasColumnName("username");
+                entity.Property(u => u.UserName).HasColumnName("username"); // lưu ý là `UserName` chứ không phải `Username`
                 entity.Property(u => u.Email).HasColumnName("email");
-                entity.Property(u => u.PasswordHash).HasColumnName("password_hash"); // 👈 QUAN TRỌNG
+                entity.Property(u => u.PasswordHash).HasColumnName("password_hash");
             });
 
             base.OnModelCreating(modelBuilder);

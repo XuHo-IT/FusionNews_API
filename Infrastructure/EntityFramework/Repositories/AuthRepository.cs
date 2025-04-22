@@ -1,52 +1,39 @@
 ﻿using Application.Entities.Base;
 using Application.Interfaces.IRepositories;
-using Dapper;
-using Infrastructure.EntityFramework.DataAccess;
-using Newtonsoft.Json;
-using System.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.EntityFramework.Repositories
 {
-    public class AuthRepository : DapperBase, IAuthRepository
+    public class AuthRepository : IAuthRepository
     {
-        public async Task AddUserAsync(User user)
-        {
-            await WithConnection(async connection =>
-            {
-                var parameters = new DynamicParameters();
-                var jInput = JsonConvert.SerializeObject(user);
-                parameters.Add("@JInput", jInput, DbType.String);
+        private readonly UserManager<User> _userManager;
 
-                await connection.ExecuteAsync(
-                    "SELECT usf_add_user(@JInput::jsonb)",
-                    param: parameters,
-                    commandType: CommandType.Text
-                );
-                return 0;
-            });
+        public AuthRepository(UserManager<User> userManager)
+        {
+            _userManager = userManager;
+        }
+
+        public async Task<IdentityResult> AddUserAsync(User user, string rawPassword)
+        {
+            // Không gán password vào PasswordHash nữa!
+            return await _userManager.CreateAsync(user, rawPassword);
         }
 
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
-            return await WithConnection(async connection =>
-            {
-                var query = "SELECT * FROM usf_get_user_by_username(@Username)";
-                return await connection.QueryFirstOrDefaultAsync<User>(query, new { Username = username });
-            });
+            return await _userManager.FindByNameAsync(username);
         }
 
         public async Task<bool> IsUsernameTakenAsync(string username)
         {
-            return await WithConnection(async connection =>
-            {
+            var user = await _userManager.FindByNameAsync(username);
+            return user != null;
+        }
 
-                var query = "SELECT usf_is_username_taken(@Username)";
-                var result = await connection.ExecuteScalarAsync<int>(query, new { Username = username });
-                return result > 0;
-            });
+        public async Task<bool> CheckPasswordAsync(User user, string password)
+        {
+            return await _userManager.CheckPasswordAsync(user, password);
         }
     }
+
 }
-
-
-
