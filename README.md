@@ -27,4 +27,4 @@
 
 ## 🔗 UI Repository
 
-[👉 Ornamental Fish UI on GitHub](https://github.com/XuHo-IT/FusionNews_UI)
+[👉 Fusion News UI on GitHub](https://github.com/XuHo-IT/FusionNews_UI)
