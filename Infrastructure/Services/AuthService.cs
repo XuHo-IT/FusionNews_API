@@ -4,7 +4,6 @@ using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServices;
 using Application.Reponse;
 using FusionNews_API.Services.Jwt;
-using Microsoft.AspNetCore.Identity;
 using System.Net;
 
 namespace Infrastructure.Services
@@ -81,7 +80,7 @@ namespace Infrastructure.Services
 
             response.StatusCode = HttpStatusCode.OK;
             response.isSuccess = true;
-            response.Result = new AuthResponse { Token = token, UserId = user.Id, Username = user.Username, Email = user.Email };
+            response.Result = new AuthResponse { Token = token, UserId = user.Id, Username = user.UserName, Email = user.Email };
             return response;
         }
     }
