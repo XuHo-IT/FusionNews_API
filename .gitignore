@@ -14,3 +14,4 @@ model.tar.gz
 cert
 appsettings.json
 FusionNews_API.csproj
+/FusionNews_API/obj/
