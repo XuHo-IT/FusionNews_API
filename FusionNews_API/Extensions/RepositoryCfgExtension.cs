@@ -7,7 +7,7 @@ namespace FusionNews_API.WebExtensions
     {
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
-
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<IPostRepository, PostRepository>();

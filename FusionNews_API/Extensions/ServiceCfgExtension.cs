@@ -14,13 +14,13 @@ namespace FusionNews_API.WebExtensions
     {
         public static IServiceCollection AddService(this IServiceCollection services)
         {
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<INewsService, NewsService>();
             services.AddSingleton<Log>();
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IChatBotService, ChatBotService>();
-
 
             return services;
         }

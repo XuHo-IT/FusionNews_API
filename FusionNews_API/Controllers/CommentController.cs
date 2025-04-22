@@ -1,4 +1,5 @@
 ﻿using Application.Entities.Base;
+using Application.Entities.DTOS.Comment;
 using Application.Entities.DTOS.CommentOfPost;
 using Application.Interfaces.IServices;
 using Application.Interfaces.Services;
@@ -6,7 +7,6 @@ using Application.Reponse;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Security.Claims;
 
 namespace FusionNews_API.Controllers
 {
@@ -30,11 +30,11 @@ namespace FusionNews_API.Controllers
         }
 
         [HttpGet("get-all-comment/{postId:int}")]
-        public async Task<IActionResult> GetAllComments([FromRoute] int PostId)
+        public async Task<IActionResult> GetAllComments([FromRoute] int postId)
         {
             try
             {
-                var post = await _postService.GetPostByIdAsync(PostId);
+                var post = await _postService.GetPostByIdAsync(postId);
 
                 if (post == null)
                 {
@@ -44,7 +44,8 @@ namespace FusionNews_API.Controllers
                     return NotFound(_response);
                 }
 
-                var response = await _commentService.GetCommentsAsync(PostId);
+                var response = await _commentService.GetCommentsAsync(postId);
+
                 _log.LogiInfo($"Get Comments successfully at {DateTime.Now}.");
 
                 return StatusCode((int)response.StatusCode, response);
@@ -72,6 +73,7 @@ namespace FusionNews_API.Controllers
                 return StatusCode(500, _response);
             }
         }
+
         [HttpPost("create-comment/{postId:int}")]
         public async Task<ActionResult> CreateComment([FromRoute] int postId, CreateCommentDto commentCreateDto)
         {
@@ -101,6 +103,7 @@ namespace FusionNews_API.Controllers
                 Comment commentModel = _mapper.Map<Comment>(commentCreateDto);
                 //commentModel.UserId = userId;
                 commentModel.UserId = "545400cb-fbef-4dd5-a306-7953935d1885"; // test
+                commentModel.PostId = postId;
 
                 var response = await _commentService.CreateCommentAsync(commentModel);
                 _log.LogiInfo($"Comment created successfully at {DateTime.Now}.");

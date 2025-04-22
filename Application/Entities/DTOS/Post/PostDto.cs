@@ -19,6 +19,7 @@ namespace Application.Entities.DTOS.Post
         public string CreatedBy { get; set; } = string.Empty;
         public ICollection<PostTag>? PostTags { get; set; }
         public ICollection<CommentDto>? Comments { get; set; }
+        public int TotalComment { get; set; }
         public NewsOfPost? NewsOfPost { get; set; }
     }
 }

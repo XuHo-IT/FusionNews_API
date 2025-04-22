@@ -4,7 +4,6 @@ using Application.Interfaces.IRepositories;
 using Application.Interfaces.IServices;
 using Application.Reponse;
 using FusionNews_API.Services.Jwt;
-using Microsoft.AspNetCore.Identity;
 using System.Net;
 
 namespace Infrastructure.Services
