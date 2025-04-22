@@ -30,7 +30,7 @@ namespace FusionNews_API.Controllers
                 _response.isSuccess = true;
                 _response.Result = newsData;
                 _log.LogiInfo("News fetched at " + DateTime.Now);
-                return StatusCode((int)response.StatusCode, response);
+                return StatusCode((int)_response.StatusCode, _response);
             }
             catch (HttpRequestException ex)
             {
