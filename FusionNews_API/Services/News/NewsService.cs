@@ -26,11 +26,6 @@ namespace FusionNews_API.Services.News
 
                 articles = Util.Filtering(articles, filterOn, filterRequest);
 
-                response.currentPage = pageNumber;
-                response.pageSize = pageSize;
-                response.totalRecords = articles.Count();
-                response.totalPages = (int)Math.Ceiling((double)response.totalRecords / pageSize);
-
                 articles = Util.Pagination(pageNumber, pageSize, articles);
 
 

@@ -12,10 +12,5 @@ namespace Application.Reponse
         public bool isSuccess { get; set; }
         public List<string> ErrorMessages { get; set; }
         public object Result { get; set; }
-
-        public int currentPage { get; set; }
-        public int totalPages { get; set; }
-        public int pageSize { get; set; } //items per page
-        public int totalRecords { get; set; } // total items
     }
 }
