@@ -80,11 +80,7 @@ namespace Infrastructure.Services
 
             response.StatusCode = HttpStatusCode.OK;
             response.isSuccess = true;
-            response.Result = new
-            {
-                token,
-                user = new { user.Id, user.UserName, user.Email }
-            };
+            response.Result = new AuthResponse { Token = token, UserId = user.Id, Username = user.UserName, Email = user.Email };
             return response;
         }
     }
