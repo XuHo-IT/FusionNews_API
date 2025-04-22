@@ -1,4 +1,6 @@
 ﻿using Application.Entities.Base;
+using Application.Entities.DTOS.Comment;
+using Application.Entities.DTOS.Post;
 using Application.Interfaces.IRepositories;
 using Dapper;
 using Infrastructure.EntityFramework.Const;
@@ -32,18 +34,35 @@ namespace Infrastructure.EntityFramework.Repositories
                 var parameters = new DynamicParameters();
                 var jInput = JsonConvert.SerializeObject(new { id });
                 parameters.Add("@JInput", jInput, DbType.String);
-                var result = await connection.QueryFirstOrDefaultAsync<Post>(
+
+                var post = await connection.QueryAsync(
                     StoredExecFunction.FindPostById,
                     param: parameters,
                     commandType: CommandType.Text
                 );
 
-                if (result == null)
+                var postf = post.FirstOrDefault();
+
+                if (postf == null)
                 {
                     throw new Exception("Post not found.");
                 }
 
-                return result;
+                // Deserialize 'comments' field into List<CommentDto>
+                var commentsJson = postf.comments.ToString();
+                var comments = JsonConvert.DeserializeObject<ICollection<Comment>>(commentsJson);
+
+                var postmodel = new Post
+                {
+                    PostId = postf.postid,
+                    Title = postf.title,
+                    Content = postf.content,
+                    CreateAt = postf.createat,
+                    UpdateAt = postf.updateat,
+                    Comments = comments
+                };
+
+                return postmodel;
             });
         }
 

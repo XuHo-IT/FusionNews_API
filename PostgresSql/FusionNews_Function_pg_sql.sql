@@ -230,7 +230,8 @@ RETURNS TABLE(
 	content text, 
 	newsofpostid int, 
 	createat TIMESTAMPTZ, -- timestamp with time zone = TIMESTAMPTZ
-    updateat TIMESTAMPTZ 
+    updateat TIMESTAMPTZ,
+	userid text
 	)AS $$
 BEGIN
     RETURN QUERY
@@ -240,7 +241,8 @@ BEGIN
         post.content,
         post.news_of_post_id,
         post.create_at,
-        post.update_at
+        post.update_at,
+		post.user_id
     FROM post;
 END;
 $$ LANGUAGE plpgsql;
@@ -248,12 +250,14 @@ $$ LANGUAGE plpgsql;
 -- Find Post by Id
 CREATE OR REPLACE FUNCTION usf_find_post_by_id(json_input jsonb)
 RETURNS TABLE(
-	postid int, 
-	title varchar(100), 
-	content text, 
-	newsofpostid int, 
-	createat TIMESTAMPTZ,
-    updateat TIMESTAMPTZ 
+    postid int, 
+    title varchar(100), 
+    content text, 
+    newsofpostid int, 
+    createat TIMESTAMPTZ,
+    updateat TIMESTAMPTZ,
+	userid text,
+    comments json
 )AS $$
 DECLARE
     id INT;
@@ -264,14 +268,30 @@ BEGIN
     -- Query the 'post' table based on the extracted id
     RETURN QUERY
     SELECT 
-        post.post_id,
-        post.title::VARCHAR,
-        post.content, -- Corrected to match TEXT type
-        post.news_of_post_id,
-        post.create_at,
-        post.update_at
-    FROM post
-    WHERE post.post_id = id;
+        p.post_id,
+        p.title::VARCHAR,
+        p.content,
+        p.news_of_post_id,
+        p.create_at,
+        p.update_at,
+		p.user_id,
+        COALESCE(
+            JSON_AGG(
+                JSON_BUILD_OBJECT(
+                    'commentid', c.comment_id,
+                    'content', c.content,
+                    'createat', c.create_at,
+                    'updateat', c.update_at,
+					'userid', c.user_id
+                )
+            ) FILTER (WHERE c.comment_id IS NOT NULL),
+            '[]'::json
+        ) AS comments
+    FROM post p
+    LEFT JOIN comment c ON p.post_id = c.post_id
+    WHERE p.post_id = id
+    GROUP BY 
+        p.post_id, p.title, p.content, p.news_of_post_id, p.create_at, p.update_at, p.user_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -283,19 +303,21 @@ DECLARE
     title varchar(100);
     content TEXT ;
 	news_of_post_id int;
+	user_id text;
 BEGIN
     -- Extract values from JSON
     title := json_input->>'Title';
     content := json_input->>'Content';
 	news_of_post_id := json_input->>'NewsOfPostId';
+	user_id := json_input->>'UserId';
 
     -- Kiểm tra nếu dữ liệu hợp lệ
     IF news_of_post_id IS NULL THEN
-        INSERT INTO post (title, content, create_at)
-        VALUES (title, content, NOW());
+        INSERT INTO post (title, content, create_at, user_id)
+        VALUES (title, content, NOW(), user_id);
     ELSE
-        INSERT INTO post (title, content, news_of_post_id, create_at)
-        VALUES (title, content, news_of_post_id, NOW());
+        INSERT INTO post (title, content, news_of_post_id, create_at, user_id)
+        VALUES (title, content, news_of_post_id, NOW(), user_id);
     END IF;
 
 END;
@@ -347,7 +369,8 @@ RETURNS TABLE(
 	content text, 
 	createat TIMESTAMPTZ, -- timestamp with time zone = TIMESTAMPTZ
     updateat TIMESTAMPTZ,
-    postid int
+    postid int,
+	userid TEXT
 	)AS $$
 DECLARE
     g_post_id int;
@@ -361,8 +384,9 @@ BEGIN
         c.content,
         c.create_at,
         c.update_at,
-        c.post_id
-    FROM comment c;
+        c.post_id,
+		c.user_id
+    FROM comment c
     WHERE c.post_id = g_post_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -374,7 +398,8 @@ RETURNS TABLE(
     content text, 
     createat TIMESTAMPTZ,
     updateat TIMESTAMPTZ,
-    postid int
+    postid int,
+	userid TEXT
     ) AS $$
 DECLARE
     f_id int;
@@ -387,7 +412,8 @@ BEGIN
         c.content,
         c.create_at,
         c.update_at,
-        c.post_id
+        c.post_id,
+		c.user_id
     FROM comment c
     WHERE c.comment_id = f_id;
 END;
@@ -398,16 +424,18 @@ CREATE OR REPLACE FUNCTION usf_create_comment(json_input jsonb)
 RETURNS void
 AS $$
 DECLARE
+	c_user_id varchar;
     c_content TEXT;
     c_post_id int;
 BEGIN
     -- Extract values from JSON
+	c_user_id := json_input->>'UserId';
     c_content := json_input->>'Content';
     c_post_id := json_input->>'PostId';
 
     -- Insert into table
-    INSERT INTO comment (content, post_id, create_at)
-    VALUES (c_content, c_post_id, NOW());
+    INSERT INTO comment (user_id, content, post_id, create_at)
+    VALUES (c_user_id, c_content, c_post_id, NOW());
 END;
 $$ LANGUAGE plpgsql;
 
@@ -454,3 +482,4 @@ BEGIN
     DELETE FROM comment
     WHERE comment_id = id;
 END;
+$$ LANGUAGE plpgsql;
