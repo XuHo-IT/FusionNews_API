@@ -7,7 +7,6 @@
 ## 🌟 Features
 
 - 🌍 Read news from various countries and regions
-- 🔐 Secure login via **Gmail**
 - 📦 Modular architecture with clean separation of concerns
 - 🔄 **API Versioning** for backward compatibility
 - 📘 Integrated with **Swagger** for interactive API documentation
