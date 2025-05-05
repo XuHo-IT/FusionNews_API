@@ -14,6 +14,9 @@ namespace Infrastructure.EntityFramework.Repositories
         public NewsRepository(IConfiguration configuration)
         {
             _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+            _httpClient.Timeout = TimeSpan.FromSeconds(30);
+
             _apiKey = configuration["News:APIKey"];
             _endpoint = configuration["News:APIEndPoint"];
         }
@@ -25,8 +28,6 @@ namespace Infrastructure.EntityFramework.Repositories
 
             // Construct the API URL with the dynamic date and search query
             var url = $"{_endpoint}?q={searchQuery}&from={yesterday}&sortBy=publishedAt&apiKey={_apiKey}";
-
-            _httpClient.Timeout = TimeSpan.FromSeconds(30);
 
             // Make the API request
             var response = await _httpClient.GetAsync(url);
