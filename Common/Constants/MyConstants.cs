@@ -10,5 +10,6 @@ namespace Common.Constants
     {
         public const int pageNumber = 1;
         public const int pageSize = 3;
+        public const string filterQuery = "*";
     }
 }

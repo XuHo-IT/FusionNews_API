@@ -20,15 +20,15 @@ namespace FusionNews_API.Controllers
             _log = log;
         }
         [HttpGet("get-all-news")]
-        public async Task<IActionResult> GetLatestNews([FromQuery] string? filterOn, [FromQuery] string? filterRequest, [FromQuery] int pageNumber = MyConstants.pageNumber, [FromQuery] int pageSize = MyConstants.pageSize)
+        public async Task<IActionResult> GetLatestNews([FromQuery] string? filterRequest, [FromQuery] int pageNumber = MyConstants.pageNumber, [FromQuery] int pageSize = MyConstants.pageSize)
         {
             try
             {
-                var response = await _newsService.GetNewsAsync(filterOn, filterRequest, pageNumber, pageSize);
+                var response = await _newsService.GetNewsAsync(filterRequest ?? MyConstants.filterQuery, pageNumber, pageSize);
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.isSuccess = true;
-                _response.Result = response;
+                _response.Result = response.Result;
                 _log.LogiInfo("News fetched at " + DateTime.Now);
                 return StatusCode((int)_response.StatusCode, _response);
             }
