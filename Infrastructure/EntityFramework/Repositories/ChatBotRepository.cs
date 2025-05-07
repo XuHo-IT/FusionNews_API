@@ -1,5 +1,6 @@
 ﻿using Application.Entities.Base;
 using Application.Interfaces.IRepositories;
+using Application.Reponse.Chatbot;
 using Application.Request.Chatbot;
 using Dapper;
 using Infrastructure.EntityFramework.Const;
@@ -91,7 +92,7 @@ namespace Infrastructure.EntityFramework.Repositories
             });
         }
 
-        public async Task<string> GetAnswer(int id)
+        public async Task<ChatbotAnswerResponse> GetAnswer(int id)
         {
             return await WithConnection(async connection =>
             {
@@ -99,7 +100,7 @@ namespace Infrastructure.EntityFramework.Repositories
                 var parameters = new DynamicParameters();
                 parameters.Add("@JInput", jInput, DbType.String);
 
-                var result = await connection.QueryFirstOrDefaultAsync<string>(
+                var result = await connection.QueryFirstOrDefaultAsync<ChatbotAnswerResponse>(
                     StoredExecFunction.GetAnswer,
                     param: parameters,
                     commandType: CommandType.Text
