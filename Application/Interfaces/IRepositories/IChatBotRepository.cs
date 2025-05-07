@@ -1,4 +1,5 @@
 ﻿using Application.Entities.Base;
+using Application.Reponse.Chatbot;
 using Application.Request.Chatbot;
 
 namespace Application.Interfaces.IRepositories
@@ -10,7 +11,7 @@ namespace Application.Interfaces.IRepositories
         Task UpdateQuestion(ChatbotQuestion chatbotQuestion);
         Task DeleteQuestion(int id);
         Task<List<ChatbotQuestionRequest>> GetQuestion();
-        Task<string> GetAnswer(int id);
+        Task<ChatbotAnswerResponse> GetAnswer(int id);
 
 
     }
