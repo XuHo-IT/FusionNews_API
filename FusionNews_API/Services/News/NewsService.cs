@@ -16,7 +16,7 @@ namespace FusionNews_API.Services.News
             _newsRepository = newsRepository;
         }
 
-        public async Task<APIResponse> GetNewsAsync(string filterRequest = MyConstants.filterQuery, int pageNumber = MyConstants.pageNumber, int pageSize = MyConstants.pageSize)
+        public async Task<APIResponse> GetNewsAsync( int pageNumber, int pageSize, string filterRequest = MyConstants.filterQuery)
         {
             var response = new APIResponse();
 

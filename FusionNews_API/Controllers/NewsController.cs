@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Services;
 using Application.Reponse;
+using Azure;
 using Common.Constants;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -24,7 +25,18 @@ namespace FusionNews_API.Controllers
         {
             try
             {
-                var response = await _newsService.GetNewsAsync(filterRequest ?? MyConstants.filterQuery, pageNumber, pageSize);
+                APIResponse response;
+
+                if (string.IsNullOrEmpty(filterRequest))
+                {
+                    // Gọi overload không có filterRequest
+                    response = await _newsService.GetNewsAsync(pageNumber, pageSize);
+                }
+                else
+                {
+                    // Gọi overload có filterRequest
+                    response = await _newsService.GetNewsAsync(pageNumber, pageSize, filterRequest);
+                }
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.isSuccess = true;

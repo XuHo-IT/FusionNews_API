@@ -1,4 +1,5 @@
 ﻿using Application.Entities.Base;
+using Application.Entities.DTOS.Comment;
 using Application.Entities.DTOS.Post;
 using Application.Interfaces.IServices;
 using Application.Interfaces.Services;
@@ -8,7 +9,6 @@ using FusionNews_API.DTOs.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Security.Claims;
 
 namespace FusionNews_API.Controllers
 {
@@ -63,7 +63,6 @@ namespace FusionNews_API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPost("create-post")]
         public async Task<ActionResult> CreatePost([FromBody] CreatePostDto postCreateDto)
         {
@@ -125,6 +124,20 @@ namespace FusionNews_API.Controllers
                     _response.ErrorMessages.Add("Post not found");
                     return NotFound(_response);
                 }
+
+                //////////////////////////////////////////////////////////////////////
+                // Test with static user
+                //var postDto = _mapper.Map<PostDto>(post);
+                //postDto.CreatedBy = "Tuan vip pro"; // test
+                //var commentDto = _mapper.Map<List<CommentDto>>(postDto.Comments);
+                //foreach (var comment in commentDto)
+                //{
+                //    comment.CreatedBy = "Tuan vip pro"; // test
+                //}
+
+                //postDto.Comments = commentDto;
+                //////////////////////////////////////////////////////////////////////
+
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.isSuccess = true;
                 _response.Result = result;

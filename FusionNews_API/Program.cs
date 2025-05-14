@@ -1,13 +1,9 @@
 using Application.Entities.Base;
-using Application.Interfaces.IRepositories;
-using Application.Interfaces.IServices;
 using Common.Middleware;
 using FusionNews_API.Helpers;
 using FusionNews_API.Services.Jwt;
 using FusionNews_API.WebExtensions;
 using Infrastructure.EntityFramework.DataAccess;
-using Infrastructure.EntityFramework.Repositories;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,21 +16,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddService();
 builder.Services.AddRepository();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
-
-
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    // Run this command in the terminal to generator migration
-    // --> dotnet ef migrations add AddDB  -p ../Infrastructure -s ../FusionNews_Api 
 });
 
 builder.Services.AddIdentity<User, IdentityRole>()

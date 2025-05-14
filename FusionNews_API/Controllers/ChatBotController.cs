@@ -179,8 +179,10 @@ namespace FusionNews_API.Controllers
             try
             {
                 ChatbotQuestion chatbotQuestion = _mapper.Map<ChatbotQuestion>(chatbotAnswerRequest);
-                var answer = await _chatBotService.GetAnswer(chatbotAnswerRequest.question_id);
-                return Ok(new { answer });
+                
+                var _response = await _chatBotService.GetAnswer(chatbotAnswerRequest.question_id);
+                return Ok(_response);
+
             }
             catch (HttpRequestException ex)
             {

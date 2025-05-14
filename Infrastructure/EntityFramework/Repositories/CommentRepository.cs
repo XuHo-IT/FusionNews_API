@@ -68,7 +68,7 @@ namespace Infrastructure.EntityFramework.Repositories
 
                 if (result == null)
                 {
-                    throw new Exception("Post not found.");
+                    throw new Exception("Comment not found.");
                 }
 
                 return result;
@@ -81,6 +81,7 @@ namespace Infrastructure.EntityFramework.Repositories
             {
                 var parameters = new DynamicParameters();
                 var jInput = JsonConvert.SerializeObject(new { postId });
+                parameters.Add("@JInput", jInput, DbType.String);
                 var result = await connection.QueryAsync<Comment>(
                     StoredExecFunction.GetAllComments,
                     param: parameters,

@@ -133,7 +133,7 @@ namespace FusionNews_API.Services.Quetions
             var response = new APIResponse();
 
             try
-            {
+            {      
                 var resultResponse = await _chatBotRepository.GetAnswer(id);
                 response.Result = resultResponse;
                 response.StatusCode = HttpStatusCode.OK;

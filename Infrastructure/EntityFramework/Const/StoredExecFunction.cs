@@ -15,7 +15,7 @@
         public const string UpdateQuestion = "SELECT * FROM usf_update_question(@JInput::jsonb)";
         public const string DeleteQuestion = "SELECT usf_delete_question(@JInput::jsonb)";
         public const string GetQuestion = "SELECT * FROM usf_get_questions()";
-        public const string GetAnswer = "SELECT usf_get_answer(@JInput::jsonb)";
+        public const string GetAnswer = "SELECT * FROM usf_get_answer(@JInput::jsonb)";
 
         // User
         public const string AddUser = "SELECT usf_add_user(@JInput::jsonb)";
