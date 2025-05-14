@@ -16,20 +16,25 @@ namespace FusionNews_API.Services.News
             _newsRepository = newsRepository;
         }
 
-        public async Task<APIResponse> GetNewsAsync(string? filterOn = null, string? filterRequest = null, int pageNumber = MyConstants.pageNumber, int pageSize = MyConstants.pageSize)
+        public async Task<APIResponse> GetNewsAsync( int pageNumber, int pageSize, string filterRequest = MyConstants.filterQuery)
         {
             var response = new APIResponse();
 
             try
             {
-                var articles = await _newsRepository.FetchNewsAsync(filterOn);
+                var newsApiResponse = await _newsRepository.FetchNewsAsync(filterRequest);
 
-                articles = Util.Filtering(articles, filterOn, filterRequest);
+                var newsResponse = new NewsResponse
+                {
+                    NewsApiResponse = newsApiResponse,
+                    TotalPages = (int)Math.Ceiling((double)newsApiResponse.TotalResults / pageSize),
+                    PageSize = pageSize,
+                    CurrentPage = pageNumber,
+                };
+                newsResponse = Util.Pagination(pageNumber, pageSize, newsResponse);
 
-                articles = Util.Pagination(pageNumber, pageSize, articles);
 
-
-                response.Result = articles;
+                response.Result = newsResponse;
                 response.StatusCode = HttpStatusCode.OK;
                 response.isSuccess = true;
             }

@@ -150,21 +150,24 @@ SELECT * FROM usf_get_questions();
 
 
 CREATE OR REPLACE FUNCTION usf_get_answer(json_input jsonb)
-RETURNS TEXT
+RETURNS TABLE (
+    question_id INT,
+    answer TEXT
+)
 AS $$
 DECLARE
     qid INT;
-    result TEXT;
 BEGIN
     -- Extract values from JSON input
     qid := (json_input->>'questionid')::INT;
 
-    -- Look for the question by ID and text
-    SELECT answer INTO result
-    FROM public.chatbot_question
-    WHERE question_id = qid ;
-
-    RETURN result;
+    -- Return both question_id and answer
+    RETURN QUERY
+    SELECT 
+        cq.question_id,
+        cq.answer
+    FROM public.chatbot_question cq
+    WHERE cq.question_id = qid;
 END;
 $$ LANGUAGE plpgsql;
 

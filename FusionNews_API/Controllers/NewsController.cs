@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Services;
 using Application.Reponse;
+using Azure;
 using Common.Constants;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -20,15 +21,26 @@ namespace FusionNews_API.Controllers
             _log = log;
         }
         [HttpGet("get-all-news")]
-        public async Task<IActionResult> GetLatestNews([FromQuery] string? filterOn, [FromQuery] string? filterRequest, [FromQuery] int pageNumber = MyConstants.pageNumber, [FromQuery] int pageSize = MyConstants.pageSize)
+        public async Task<IActionResult> GetLatestNews([FromQuery] string? filterRequest, [FromQuery] int pageNumber = MyConstants.pageNumber, [FromQuery] int pageSize = MyConstants.pageSize)
         {
             try
             {
-                var response = await _newsService.GetNewsAsync(filterOn, filterRequest, pageNumber, pageSize);
+                APIResponse response;
+
+                if (string.IsNullOrEmpty(filterRequest))
+                {
+                    // Gọi overload không có filterRequest
+                    response = await _newsService.GetNewsAsync(pageNumber, pageSize);
+                }
+                else
+                {
+                    // Gọi overload có filterRequest
+                    response = await _newsService.GetNewsAsync(pageNumber, pageSize, filterRequest);
+                }
 
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.isSuccess = true;
-                _response.Result = response;
+                _response.Result = response.Result;
                 _log.LogiInfo("News fetched at " + DateTime.Now);
                 return StatusCode((int)_response.StatusCode, _response);
             }

@@ -40,7 +40,7 @@ namespace Infrastructure.EntityFramework.Repositories
                     commandType: CommandType.Text
                 );
 
-                return result.ToList();
+                return result?.ToList() ?? new List<ChatbotQuestionRequest>();
             });
         }
 
@@ -88,11 +88,11 @@ namespace Infrastructure.EntityFramework.Repositories
                     commandType: CommandType.Text
                 );
 
-                return result.ToList();
+                return result?.ToList() ?? new List<ChatbotQuestion>();
             });
         }
 
-        public async Task<ChatbotAnswerResponse> GetAnswer(int id)
+        public async Task<ChatbotAnswerResponse?> GetAnswer(int id)
         {
             return await WithConnection(async connection =>
             {

@@ -5,6 +5,6 @@ namespace Application.Interfaces.Services
 {
     public interface INewsService
     {
-        Task<APIResponse> GetNewsAsync(string? filterOn = null, string? filterRequest = null, int pageNumber = MyConstants.pageNumber, int pageSize = MyConstants.pageSize);
+        Task<APIResponse> GetNewsAsync( int pageNumber, int pageSize, string filterRequest = MyConstants.filterQuery);
     }
 }
